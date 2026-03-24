@@ -435,22 +435,9 @@ Este é um projeto pessoal, mas se quiser melhorias:
 4. Push para a branch (`git push origin feature/meu-feature`)
 5. Abra um Pull Request
 
-## Licença
-
-MIT — Use livremente em seus projetos.
-
 ## Contato
 
 **Felipe Bueno**
 GitHub: [@fe-m-bueno](https://github.com/fe-m-bueno)
-Email: felipe@example.com
+Email: felipebueno.dev@gmail.com
 
----
-
-## Roadmap
-
-- [ ] Suporte a recursos de persistência (ex: logging de buscas)
-- [ ] Tool adicional: `get_timeline` — experiência em ordem cronológica
-- [ ] Tool adicional: `recommend_roles` — recomenda vagas baseado em perfil
-- [ ] Integração com APIs externas (ex: LinkedIn, GitHub stats)
-- [ ] Dashboard de analytics: quais perguntas são mais comuns
