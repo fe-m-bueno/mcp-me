@@ -1,0 +1,22 @@
+node_modules/
+dist/
+
+# Environment
+.env
+.env.*
+
+# Claude Code
+.claude/settings.local.json
+.claude/skills/
+.agents/
+skills-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+.vscode/
+.idea/

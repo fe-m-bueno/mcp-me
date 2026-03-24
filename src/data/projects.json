@@ -1,0 +1,299 @@
+[
+	{
+		"name": "Code Review Crew",
+		"description": "Multi-agent AI code review system with 4 specialized agents (Architect, Security, Performance, Lead) producing consolidated reports with severity ratings and quality scores.",
+		"tech": ["Python", "CrewAI", "FastAPI", "LiteLLM", "OpenRouter"],
+		"repo": "https://github.com/fe-m-bueno/code-review-crew",
+		"demo": null,
+		"highlights": [
+			"4 specialized AI agents with distinct review roles",
+			"Executive summaries with quality scores (1-10)",
+			"Security categorization (Critical to Low)",
+			"Performance bottleneck identification",
+			"Supports 12+ programming languages"
+		],
+		"status": "completed",
+		"category": "cv"
+	},
+	{
+		"name": "RecollageFM",
+		"description": "Last.fm album collage generator with drag-and-drop reordering, server-side PNG rendering, and multilingual support. Grids up to 10x10 with undo/redo history.",
+		"tech": [
+			"Next.js",
+			"React",
+			"TypeScript",
+			"node-canvas",
+			"i18n",
+			"TailwindCSS"
+		],
+		"repo": "https://github.com/fe-m-bueno/recollagefm",
+		"demo": "https://recollagefm.vercel.app",
+		"highlights": [
+			"Drag-and-drop grid reordering",
+			"Server-side PNG rendering with node-canvas",
+			"Multilingual support (i18n)",
+			"Grids up to 10x10",
+			"Undo/redo history"
+		],
+		"status": "completed",
+		"category": "cv"
+	},
+	{
+		"name": "Stealth Reader",
+		"description": "Creative web app transforming EPUB books into pseudo-TypeScript code in a VS Code-like interface — making reading look like coding.",
+		"tech": ["Svelte 5", "SvelteKit", "TypeScript"],
+		"repo": "https://github.com/fe-m-bueno/stealth-reader",
+		"demo": "https://stealth-reader.vercel.app",
+		"highlights": [
+			"EPUB parsing and transformation",
+			"VS Code-like interface",
+			"Makes reading look like coding"
+		],
+		"status": "completed",
+		"category": "cv"
+	},
+	{
+		"name": "Convert CLI",
+		"description": "Universal local file conversion CLI across 7 categories (images, video, audio, docs, archives, ebooks, fonts) with batch processing and interactive wizard.",
+		"tech": [
+			"Node.js",
+			"Commander.js",
+			"Sharp",
+			"FFmpeg",
+			"LibreOffice",
+			"Calibre",
+			"ImageMagick"
+		],
+		"repo": "https://github.com/fe-m-bueno/convert-cli",
+		"demo": null,
+		"highlights": [
+			"7 conversion categories",
+			"Batch processing",
+			"Interactive wizard mode",
+			"Granular quality control per format type"
+		],
+		"status": "completed",
+		"category": "cv"
+	},
+	{
+		"name": "Bookclubinho",
+		"description": "Full-stack book club platform with real-time iMessage-style chat (SSE + Redis Streams), OAuth2 + magic link auth, gamification system, and CI/CD pipeline.",
+		"tech": [
+			"Next.js",
+			"FastAPI",
+			"PostgreSQL",
+			"Upstash Redis",
+			"Cloudflare R2",
+			"Python"
+		],
+		"repo": "https://github.com/fe-m-bueno/bookclubinho",
+		"demo": null,
+		"highlights": [
+			"Real-time iMessage-style chat (SSE + Redis Streams)",
+			"OAuth2 + magic link authentication",
+			"JWT blacklist + session tracking",
+			"Gamification (badges, streaks, Wrapped)",
+			"Book voting via Hardcover GraphQL API",
+			"RLS on every table",
+			"CI/CD deploying to Vercel + Railway"
+		],
+		"status": "in-progress",
+		"category": "cv"
+	},
+	{
+		"name": "Resutorant",
+		"description": "Dining experience tracker with detailed reviews, list organization, advanced filtering, and analytics with interactive charts.",
+		"tech": [
+			"Next.js",
+			"TypeScript",
+			"TailwindCSS",
+			"Supabase",
+			"TanStack Query",
+			"Recharts",
+			"React Hook Form",
+			"Zod",
+			"Radix UI",
+			"Framer Motion"
+		],
+		"repo": "https://github.com/fe-m-bueno/resutorant",
+		"demo": "https://resutorantt.vercel.app",
+		"highlights": [
+			"Detailed restaurant reviews with notes, prices, dates, custom tags",
+			"List organization (visited/saved)",
+			"Advanced search and filtering",
+			"Dining analytics with interactive charts",
+			"Supabase authentication"
+		],
+		"status": "completed",
+		"category": "additional"
+	},
+	{
+		"name": "Questione",
+		"description": "Quiz/question platform for creating and answering questions.",
+		"tech": ["Next.js", "TypeScript", "TailwindCSS", "Radix UI"],
+		"repo": "https://github.com/fe-m-bueno/questione",
+		"demo": "https://questione.vercel.app",
+		"highlights": [],
+		"status": "completed",
+		"category": "additional"
+	},
+	{
+		"name": "Lederboxed",
+		"description": "TV show application for browsing series, managing watchlists, and streaming content.",
+		"tech": ["Next.js", "TypeScript", "TailwindCSS", "i18n"],
+		"repo": "https://github.com/fe-m-bueno/lederboxed",
+		"demo": "https://lederboxed.vercel.app",
+		"highlights": [
+			"Browse shows",
+			"Create and manage watchlists",
+			"Direct streaming"
+		],
+		"status": "completed",
+		"category": "additional"
+	},
+	{
+		"name": "Benefícios Demo",
+		"description": "Demonstration app simulating a benefits card system with expense tracking and category-based balance management.",
+		"tech": [
+			"Next.js 15",
+			"React 19",
+			"Drizzle ORM",
+			"PostgreSQL",
+			"Neon",
+			"TailwindCSS",
+			"Recharts",
+			"Zod",
+			"Vitest"
+		],
+		"repo": "https://github.com/fe-m-bueno/beneficios-demo",
+		"demo": null,
+		"highlights": [
+			"Expense classification by category",
+			"Balance calculation per category",
+			"Interactive pie charts",
+			"Server actions & server-side data fetching",
+			"Unit tests with Vitest"
+		],
+		"status": "completed",
+		"category": "additional"
+	},
+	{
+		"name": "Recollageboxd",
+		"description": "Movie/media tracking application.",
+		"tech": ["Next.js", "TypeScript", "TailwindCSS", "Primer React"],
+		"repo": "https://github.com/fe-m-bueno/recollageboxd",
+		"demo": "https://recollageboxd.vercel.app",
+		"highlights": [],
+		"status": "in-progress",
+		"category": "additional"
+	},
+	{
+		"name": "MCR Low Price Scraper",
+		"description": "Automated price monitoring tool with scraping and historical price tracking via GitHub Actions.",
+		"tech": ["Python", "GitHub Actions"],
+		"repo": "https://github.com/fe-m-bueno/mcr-lowpricescraper",
+		"demo": null,
+		"highlights": [
+			"Automated price monitoring",
+			"Historical price data in JSON",
+			"GitHub Actions automation",
+			"193+ commits of active development"
+		],
+		"status": "active",
+		"category": "additional"
+	},
+	{
+		"name": "felipe-bueno.com",
+		"description": "Personal portfolio website with smooth animations, dark/light theme, contact form, Last.fm integration, and project filtering.",
+		"tech": [
+			"Next.js 14",
+			"React",
+			"TypeScript",
+			"TailwindCSS",
+			"Framer Motion",
+			"i18next",
+			"Last.fm API",
+			"Nodemailer",
+			"Resend"
+		],
+		"repo": "https://github.com/fe-m-bueno/felipe-bueno",
+		"demo": "https://felipe-bueno.com",
+		"highlights": [
+			"Smooth animations with Framer Motion",
+			"Dark/light theme toggle",
+			"Functional contact form with validation",
+			"Last.fm music integration",
+			"Project filtering",
+			"SEO optimized"
+		],
+		"status": "completed",
+		"category": "additional"
+	},
+	{
+		"name": "WeatherNowAt",
+		"description": "Weather application built with Svelte and SvelteKit.",
+		"tech": [
+			"Svelte",
+			"SvelteKit",
+			"TypeScript",
+			"TailwindCSS",
+			"Vite",
+			"Vitest"
+		],
+		"repo": "https://github.com/fe-m-bueno/weathernowat",
+		"demo": "https://weathernowat.vercel.app",
+		"highlights": [],
+		"status": "completed",
+		"category": "additional"
+	},
+	{
+		"name": "Stopwatch",
+		"description": "Stopwatch application with internationalization support.",
+		"tech": ["Svelte", "TypeScript", "TailwindCSS", "Inlang i18n"],
+		"repo": "https://github.com/fe-m-bueno/stopwatch",
+		"demo": "https://my-stopwatch-hazel.vercel.app",
+		"highlights": [],
+		"status": "completed",
+		"category": "additional"
+	},
+	{
+		"name": "Breakstuff",
+		"description": "Nuxt starter project exploring Vue ecosystem.",
+		"tech": ["Nuxt", "Vue", "TypeScript", "TailwindCSS"],
+		"repo": "https://github.com/fe-m-bueno/breakstuff",
+		"demo": "https://breakstuff.netlify.app",
+		"highlights": [],
+		"status": "experimental",
+		"category": "additional"
+	},
+	{
+		"name": "Ematchi",
+		"description": "SvelteKit application.",
+		"tech": ["Svelte", "SvelteKit", "TypeScript"],
+		"repo": "https://github.com/fe-m-bueno/ematchi",
+		"demo": null,
+		"highlights": [],
+		"status": "experimental",
+		"category": "additional"
+	},
+	{
+		"name": "AI Fullstack Mood",
+		"description": "AI-powered mood tracking full-stack application.",
+		"tech": ["Next.js", "TypeScript", "TailwindCSS", "Prisma", "Vitest"],
+		"repo": "https://github.com/fe-m-bueno/ai-fullstack-mood",
+		"demo": null,
+		"highlights": [],
+		"status": "experimental",
+		"category": "additional"
+	},
+	{
+		"name": "Svelteflix",
+		"description": "SvelteKit application.",
+		"tech": ["Svelte", "SvelteKit", "TypeScript"],
+		"repo": "https://github.com/fe-m-bueno/svelteflix",
+		"demo": null,
+		"highlights": [],
+		"status": "experimental",
+		"category": "additional"
+	}
+]

@@ -1,0 +1,42 @@
+<evaluation>
+   <qa_pair>
+      <question>Does the candidate have experience with ETL data pipelines and data orchestration? If so, what specific tools did he use and what were the measurable results?</question>
+      <answer>Yes. Apache Airflow at Pilgrims Consulting, reducing manual data processing time by 60%.</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>Analyze the candidate's fit for a fullstack developer role requiring React, TypeScript, PostgreSQL, and Docker experience. What is his fit score?</question>
+      <answer>High score (above 70). He has hands-on experience with all four technologies at Pilgrims Consulting.</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>What languages does Felipe speak and at what proficiency levels?</question>
+      <answer>Portuguese (Native), English (Full Professional), Spanish (Professional Working).</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>Which of Felipe's projects use Python in their tech stack?</question>
+      <answer>Code Review Crew (Python, CrewAI, FastAPI) and MCR Low Price Scraper (Python, GitHub Actions). Bookclubinho also uses FastAPI (Python).</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>Does Felipe have experience with database performance optimization? Provide specific metrics.</question>
+      <answer>Yes. Eliminated N+1 queries improving response times by up to 99.7% (92s to 3.6s). Tuned PostgreSQL/SQL Server with indexing, reducing BI report times by 93% (29s to 1.2s).</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>How many API endpoints has Felipe delivered in his current position, and what is the daily request volume?</question>
+      <answer>90 API endpoints handling 50,000+ daily requests at Pilgrims Consulting.</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>List all frontend frameworks and libraries that Felipe has in his technical skills.</question>
+      <answer>React, Next.js, Angular, Svelte, SvelteKit, Vue.js, Nuxt, TailwindCSS.</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>Does Felipe have any projects involving multi-agent AI systems? Describe the architecture.</question>
+      <answer>Yes. Code Review Crew uses CrewAI with 4 specialized agents: Architect, Security Analyst, Performance Engineer, and Lead Reviewer, producing consolidated reports with severity ratings and quality scores.</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>What is Felipe's educational background? List institutions, degrees, and graduation dates.</question>
+      <answer>PUCPR — Associate Degree in Systems Analysis and Development (Expected 2027). UFPR — Bachelor's in Business Administration (2023).</answer>
+   </qa_pair>
+   <qa_pair>
+      <question>Analyze the candidate's fit for a Senior Rust and Go engineer role requiring 10 years of Kubernetes experience. What is his fit score and what are the main gaps?</question>
+      <answer>Low score (below 40). Main gaps: Rust, Go, Kubernetes — none of these are in his current tech stack. This would be a significant career pivot.</answer>
+   </qa_pair>
+</evaluation>
