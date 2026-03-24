@@ -21,13 +21,13 @@ Ideal para:
 
 ## Características
 
-✅ **Bilíngue** — Suporte completo a Inglês e Português Brasileiro
-✅ **Sem overhead** — Apenas 2 dependências (MCP SDK + Zod)
-✅ **Tipado** — TypeScript strict com validação Zod
-✅ **Cache de dados** — Carregamento eficiente na memória
-✅ **Parsing zero-dependências** — Markdown parseado manualmente
-✅ **Honesto** — `match_job` reporta gaps reais, não infla o perfil
-✅ **Output legível** — Texto natural estruturado, não JSON cru
+- Suporte completo a Inglês e Português Brasileiro
+- Apenas 2 dependências (MCP SDK + Zod)
+- TypeScript strict com validação Zod
+- Carregamento eficiente na memória
+- Markdown parseado manualmente
+-  `match_job` reporta gaps reais, não infla o perfil
+-  Texto natural estruturado, não JSON cru
 
 ## Ferramentas MCP
 
