@@ -11,6 +11,9 @@ dist/
 .agents/
 skills-lock.json
 
+# Baseline data (local only)
+baseline/
+
 # OS
 .DS_Store
 Thumbs.db
