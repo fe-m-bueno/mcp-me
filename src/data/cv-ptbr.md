@@ -1,91 +1,94 @@
 # Felipe Martins Bueno
 
-**Desenvolvedor Fullstack & Analista de Sistemas**
+**Desenvolvedor Fullstack | Analista de Sistemas com foco em Backend**
 
-felipebueno.dev@gmail.com | +55 41 99589-8131 | Cidade Industrial, Curitiba, PR, Brasil
+felipebueno.dev@gmail.com | +55 41 99589-8131 | Curitiba, PR, Brasil
 felipe-bueno.com | linkedin.com/in/felipe-martins-bueno | github.com/fe-m-bueno
 
 ---
 
 ## Resumo Profissional
 
-Desenvolvedor Fullstack e Analista de Sistemas com experiência prática na construção de aplicações web escaláveis utilizando **Python (Django)** e **TypeScript (Angular, Next.js)**. Formação em Administração proporciona sólida compreensão de regras de negócio, otimização de processos e comunicação com stakeholders. Capacidade comprovada em orquestração de pipelines de dados (Apache Airflow), containerização (Docker), otimização de bancos relacionais (PostgreSQL, SQL Server) e ferramentas com IA (LangChain, CrewAI). 130+ cursos técnicos concluídos (500+ horas) em arquitetura de software, IA/ML e engenharia fullstack.
+Analista de Sistemas com foco em backend e forte experiência em desenvolvimento fullstack, automações, APIs e fluxos de dados. Atua principalmente com **Python, Django, TypeScript, Angular, Next.js, PostgreSQL e SQL Server**. Experiência prática em metodologias **Agile** e **Scrum**, **TDD**, **testes unitários** e o ciclo completo de desenvolvimento de software (**SDLC**), com histórico consistente de melhoria de performance de aplicações, redução de trabalho manual e suporte a operações críticas de negócio.
 
 ---
 
 ## Competências Técnicas
 
-- **Linguagens:** JavaScript, TypeScript, Python, C#, SQL, HTML5, CSS3
+- **Linguagens:** Python, TypeScript, JavaScript, SQL, C#
 - **Frontend:** React, Next.js, Angular, Svelte, SvelteKit, Vue.js, Nuxt, TailwindCSS
-- **Backend:** Django REST Framework, .NET, Node.js, Express, Spring Boot, GraphQL, REST APIs
-- **Dados e IA:** PostgreSQL, SQL Server, MongoDB, Apache Airflow, Prisma, Drizzle ORM, LangChain, CrewAI, MCP
-- **DevOps e Ferramentas:** Docker, Git, Linux, CI/CD, AWS, Selenium, Metabase, Figma
+- **Backend e APIs:** Django, Django REST Framework, FastAPI, Node.js, Express, .NET, Spring Boot, REST APIs, GraphQL
+- **Dados e Infraestrutura:** PostgreSQL, SQL Server, Oracle, MongoDB, Apache Airflow, Redis, Docker, AWS, CI/CD, Git worktrees
+- **Metodologias e Práticas:** Agile, Scrum, TDD, testes unitários, code review, SDLC
+- **Ferramentas e Engenharia Assistida por IA:** Metabase, Selenium, Figma, LangChain, CrewAI, MCP, prompt engineering, workflows de coding com agentes
 
 ---
 
 ## Experiência Profissional
 
-### Pilgrims Consulting | *Analista de Sistemas Júnior*
-**Curitiba, PR, Brasil** — *Jul 2025 - Presente*
+### Pilgrims Consulting | Analista de Sistemas Júnior
+**Curitiba, PR, Brasil** — Jul 2025 - Presente
 
-- Arquitetou e entregou aplicações web fullstack com **Python (Django)** e **TypeScript (Angular)**, disponibilizando 90 endpoints de API com mais de 50 mil requisições diárias para equipes internas e clientes externos.
-- Orquestrou **pipelines de dados ETL** e alertas automatizados com **Apache Airflow**, reduzindo o tempo de processamento manual em cerca de 60%.
-- Desenvolveu web crawlers e bots com **Selenium** para monitorar mais de 2.000 SKUs, economizando 40+ horas mensais de extração manual e alimentando dashboards de BI que direcionaram a estratégia comercial.
-- Implantou ambientes containerizados com **Docker**, padronizando paridade dev/prod e acelerando o onboarding de desenvolvedores.
-- Otimizou querysets da API eliminando queries N+1, melhorando tempos de resposta dos endpoints em até 99,7% (ex: de 92s para 3,6s).
-- Otimizou bancos de dados relacionais (**PostgreSQL / SQL Server**) com estratégias de indexação, reduzindo tempos de geração de relatórios de BI em até 93% (ex: de 29s para 1,2s).
-- Automatizou mais de 15 processos manuais substituindo fluxos do Excel, economizando 60+ horas mensais de trabalho manual entre departamentos.
+- Manteve e expandiu uma plataforma interna em **Django** usada por **80+ usuários** nas áreas de compras, vendas, licitações e gestão de contratos.
+- Construiu ou modificou significativamente **30-40 endpoints de API REST** em um portfólio de **90 endpoints** processando **50 mil+ requisições diárias**, incluindo integrações com **LicitaSys**, **Winner** e **WinThor**.
+- Otimizou um fluxo de busca de cotações processando **40.000+ registros**, reduzindo o tempo de resposta em até **99,7%** — de **92s para 3,6s** — com tuning de queries, paginação e cache **Redis**.
+- Melhorou dashboards no **Metabase** usados diariamente por **70+ membros da equipe** e **10+ gestores sênior**, reduzindo o tempo de geração de relatórios em até **93%** — de **29s para 1,2s**.
+- Criou **60+ DAGs no Airflow** e refatorou o restante do conjunto de pipelines em **140+ workflows**, suportando movimentação de dados do **SQL Server, Oracle, PostgreSQL**, APIs, PDFs e CSVs para o data lake e data warehouse.
+- Automatizou fluxos operacionais recorrentes — avisos de garantia, preenchimento de dados de consórcio intergestores e envio de documentos e NFs — economizando **240+ horas** de trabalho manual.
+- Desenvolveu web crawlers e bots com **Selenium** para monitorar **2.000+ SKUs**, economizando **40+ horas/mês** de extração manual e alimentando dashboards de BI para decisões comerciais.
+- Ajudou a estruturar práticas de engenharia para um time de **4 desenvolvedores**, incluindo **Git**, branching, pull requests, code review, **GitHub Actions**, CI/CD, TDD e fluxos **Agile/Scrum**.
 
-### Paraná Banco S/A | *Estagiário de Remuneração e Benefícios*
-**Curitiba, PR, Brasil** — *Set 2022 - Jun 2023*
+### Paraná Banco S/A | Estagiário de Remuneração e Benefícios
+**Curitiba, PR, Brasil** — Set 2022 - Jun 2023
 
-- Construiu dashboards dinâmicos de RH e relatórios de KPIs utilizando **SQL Server** e **Power BI**, atendendo mais de 200 colaboradores em múltiplas áreas e viabilizando decisões de remuneração baseadas em dados.
-- Automatizou scripts de processamento de dados, reduzindo o tempo de processamento de 8 horas para 10 minutos.
-- Otimizou processos de controle de benefícios e verificação de dados de admissão, reduzindo erros em 90% para conformidade com governança e controladoria.
+- Deu suporte a operações de remuneração e benefícios para **800-900 colaboradores**, mantendo dados sensíveis de pessoal e melhorando a qualidade dos relatórios para as equipes jurídica, de RH, orçamento e controladoria.
+- Automatizou rotinas de processamento de dados com **SQL Server, Power BI, Excel e Python**, reduzindo o tempo de execução de **8 horas para 10 minutos** e economizando **40+ horas** de trabalho manual.
+- Melhorou fluxos de validação de admissão e controle de benefícios, reduzindo erros operacionais em **90%**.
 
-### Straumann Group | *Estagiário de Planejamento e Controle*
-**Curitiba, PR, Brasil** — *Fev 2022 - Set 2022*
+### Straumann Group | Estagiário de Planejamento e Controle
+**Curitiba, PR, Brasil** — Fev 2022 - Set 2022
 
-- Realizou modelagem financeira de custos de pessoal para mais de 2.100 colaboradores, elaborando previsões orçamentárias trimestrais e anuais na casa de milhões de reais.
-- Geriu mais de 2.000 registros em **sistemas ERP (SAP/Senior)** duplicados, mantendo paridade exata dos dados e integridade da base corporativa.
-- Automatizou fluxos de compartilhamento de dados entre 6 áreas de negócio (controladoria, qualidade, marketing, TI, comunicação e finanças), economizando 2 a 3 horas diárias no reporte mensal.
+- Construiu dashboards e fluxos de KPIs com dados do **Senior ERP** e **SAP HCM** para suportar planejamento de pessoal, benefícios, fornecedores e análise de negócios.
+- Automatizou a manutenção de registros de colaboradores nos sistemas para uma organização de **1.600+ funcionários**, reduzindo o trabalho manual em **60%** e economizando pelo menos **20 horas por semana**.
+- Suportou o orçamento de **2.100+ colaboradores** e forneceu dados recorrentes para **250+ usuários**, especialmente gestores, em **6 áreas de negócio**.
 
 ---
 
 ## Projetos
 
-**Code Review Crew** | *Python, CrewAI, FastAPI*
-Sistema multi-agente de revisão de código com IA, com 4 agentes especializados (Arquiteto, Segurança, Performance, Lead) produzindo relatórios consolidados com ratings de severidade e scores de qualidade.
+**Bookclubinho** (2026) | Next.js, FastAPI, PostgreSQL, Redis, Cloudflare R2
+Plataforma full-stack de clube do livro com chat em tempo real, autenticação segura, row-level security e deploy em produção no Vercel e Railway.
+Desenvolvida com interações orientadas a eventos, gerenciamento de sessão persistente e funcionalidades de comunidade como votação, discussões e fluxos de engajamento de leitura.
 
-**RecollageFM** | *Next.js 16, React 19, node-canvas, i18n*
-Gerador de collages de álbuns do Last.fm com drag-and-drop, renderização server-side de PNG e suporte multilíngue. Grids até 10x10 com histórico de undo/redo.
+**Resutorant** (2026) | Next.js, TypeScript, Supabase, TanStack Query
+Plataforma de avaliação e planejamento de restaurantes com dashboards autenticados, busca, listas e funcionalidades sociais com controle de privacidade, construída sobre Supabase Auth e Row Level Security.
+Inclui perfis de usuário, fluxos de planejamento e controles de privacidade na camada de aplicação sobre as políticas de banco de dados.
 
-**Stealth Reader** | *Svelte 5, SvelteKit, TypeScript*
-App web criativa que transforma livros EPUB em pseudo-código TypeScript em interface estilo VS Code — fazendo a leitura parecer codificação.
+**Code Review Crew** (2026) | Python, CrewAI, FastAPI
+Sistema multiagente de revisão de código com IA que produz relatórios técnicos consolidados com ratings de severidade, scores de qualidade e feedback acionável de engenharia.
+Coordena papéis especializados de revisão em arquitetura, segurança e performance para gerar um único output priorizado.
 
-**Convert CLI** | *Node.js, Sharp, FFmpeg, LibreOffice*
-CLI de conversão universal de arquivos em 7 categorias (imagens, vídeo, áudio, docs, arquivos, ebooks, fontes) com processamento em lote e wizard interativo.
-
-**Bookclubinho** | *Next.js 16, FastAPI, PostgreSQL, Upstash Redis, Cloudflare R2*
-Plataforma full-stack de clube do livro com chat em tempo real estilo iMessage (SSE + Redis Streams), auth OAuth2 + magic link, JWT com blacklist e session tracking, gamificação completa (badges, streaks, Wrapped anual), votação de livros com Hardcover GraphQL API, RLS em todas as tabelas e pipeline CI/CD com deploy no Vercel + Railway.
+**RecollageFM** (2024) | Next.js, React, node-canvas
+Gerador de collages de álbuns com edição drag-and-drop, renderização server-side de PNG, suporte multilíngue e grids de até 10x10.
+Gerencia edição interativa de layout no browser enquanto produz imagens renderizadas prontas para exportação no servidor.
 
 ---
 
 ## Formação Acadêmica
 
-**Pontifícia Universidade Católica do Paraná (PUCPR)** — *Previsão de Conclusão: 2027*
+**Pontifícia Universidade Católica do Paraná (PUCPR)** — Previsão de Conclusão: 2027
 Tecnólogo em Análise e Desenvolvimento de Sistemas
 
-**Universidade Federal do Paraná (UFPR)** — *Concluído em: 2023*
+**Universidade Federal do Paraná (UFPR)** — Concluído em: 2023
 Bacharelado em Administração
 
 ---
 
-## Certificações & Aprendizado Contínuo
+## Certificações
 
-- **Frontend Masters** — 130+ cursos (500+ hrs): Arquitetura de Software, IA/ML, Engenharia Fullstack, System Design, Acessibilidade, Web Performance.
-- **Astronomer** — Certificação Apache Airflow 3 Fundamentals (Jul 2025).
-- **DataCamp** — Python Data Science: Análise Exploratória, Importação de Dados, Cloud Computing.
+- **Frontend Masters** — 130+ cursos (500+ horas) em arquitetura de software, IA/ML, engenharia fullstack, system design, acessibilidade e web performance
+- **Astronomer** — Certificação Apache Airflow 3 Fundamentals
+- **DataCamp** — Python Data Science: Análise Exploratória, Importação de Dados, Cloud Computing
 
 ---
 

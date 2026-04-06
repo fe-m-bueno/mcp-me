@@ -1,15 +1,79 @@
 [
 	{
+		"name": "Bookclubinho",
+		"description": "Full-stack book club platform with real-time iMessage-style chat (SSE + Redis Streams), OAuth2 + magic link auth, JWT blacklist + session tracking, gamification system, and CI/CD pipeline.",
+		"description_ptbr": "Plataforma full-stack de clube do livro com chat em tempo real estilo iMessage (SSE + Redis Streams), auth OAuth2 + magic link, JWT com blacklist e session tracking, gamificação completa e pipeline CI/CD.",
+		"tech": [
+			"Next.js",
+			"FastAPI",
+			"PostgreSQL",
+			"Upstash Redis",
+			"Cloudflare R2",
+			"Python"
+		],
+		"repo": "https://github.com/fe-m-bueno/bookclubinho",
+		"demo": null,
+		"highlights": [
+			"Real-time iMessage-style chat (SSE + Redis Streams)",
+			"OAuth2 + magic link authentication",
+			"JWT blacklist + session tracking",
+			"Gamification system (badges, streaks, annual Wrapped)",
+			"Book voting via Hardcover GraphQL API",
+			"Row-level security on every table",
+			"CI/CD deploying to Vercel + Railway",
+			"Event-driven interactions and persistent session handling",
+			"Community features: voting, discussions, reading engagement flows"
+		],
+		"status": "in-progress",
+		"category": "cv"
+	},
+	{
+		"name": "Resutorant",
+		"description": "Restaurant review and planning platform with authenticated dashboards, search, lists, and privacy-aware social features built on Supabase Auth and Row Level Security.",
+		"description_ptbr": "Plataforma de avaliação e planejamento de restaurantes com dashboards autenticados, busca, listas e funcionalidades sociais com controle de privacidade, construída sobre Supabase Auth e Row Level Security.",
+		"tech": [
+			"Next.js",
+			"TypeScript",
+			"Supabase",
+			"TanStack Query",
+			"TailwindCSS",
+			"Recharts",
+			"React Hook Form",
+			"Zod",
+			"Radix UI",
+			"Framer Motion",
+			"dnd-kit"
+		],
+		"repo": "https://github.com/fe-m-bueno/resutorant",
+		"demo": "https://resutorantt.vercel.app",
+		"highlights": [
+			"Authenticated dashboards with profile views and planning flows",
+			"Privacy-aware social features (public/private reviews and lists)",
+			"Supabase Auth + Row Level Security",
+			"Application-level privacy controls layered on top of database policies",
+			"Duplicate prevention for comments and likes",
+			"Advanced search and filtering",
+			"Dining analytics with interactive charts (Recharts)",
+			"Drag-and-drop list organization (dnd-kit)",
+			"Defense in depth: RLS + explicit app-layer access checks"
+		],
+		"status": "completed",
+		"category": "cv"
+	},
+	{
 		"name": "Code Review Crew",
 		"description": "Multi-agent AI code review system with 4 specialized agents (Architect, Security, Performance, Lead) producing consolidated reports with severity ratings and quality scores.",
+		"description_ptbr": "Sistema multiagente de revisão de código com IA, com 4 agentes especializados (Arquiteto, Segurança, Performance, Lead) produzindo relatórios consolidados com ratings de severidade e scores de qualidade.",
 		"tech": ["Python", "CrewAI", "FastAPI", "LiteLLM", "OpenRouter"],
 		"repo": "https://github.com/fe-m-bueno/code-review-crew",
 		"demo": null,
 		"highlights": [
-			"4 specialized AI agents with distinct review roles",
+			"4 specialized AI agents with distinct review roles: Architect, Security, Performance, Lead",
 			"Executive summaries with quality scores (1-10)",
 			"Security categorization (Critical to Low)",
 			"Performance bottleneck identification",
+			"Architecture and design feedback",
+			"Single prioritized consolidated output",
 			"Supports 12+ programming languages"
 		],
 		"status": "completed",
@@ -18,6 +82,7 @@
 	{
 		"name": "RecollageFM",
 		"description": "Last.fm album collage generator with drag-and-drop reordering, server-side PNG rendering, and multilingual support. Grids up to 10x10 with undo/redo history.",
+		"description_ptbr": "Gerador de collages de álbuns do Last.fm com drag-and-drop, renderização server-side de PNG e suporte multilíngue. Grids até 10x10 com histórico de undo/redo.",
 		"tech": [
 			"Next.js",
 			"React",
@@ -33,7 +98,8 @@
 			"Server-side PNG rendering with node-canvas",
 			"Multilingual support (i18n)",
 			"Grids up to 10x10",
-			"Undo/redo history"
+			"Undo/redo history",
+			"Interactive layout editing in browser + export-ready server-rendered images"
 		],
 		"status": "completed",
 		"category": "cv"
@@ -41,20 +107,23 @@
 	{
 		"name": "Stealth Reader",
 		"description": "Creative web app transforming EPUB books into pseudo-TypeScript code in a VS Code-like interface — making reading look like coding.",
+		"description_ptbr": "App web criativa que transforma livros EPUB em pseudo-código TypeScript em interface estilo VS Code — fazendo a leitura parecer codificação.",
 		"tech": ["Svelte 5", "SvelteKit", "TypeScript"],
 		"repo": "https://github.com/fe-m-bueno/stealth-reader",
 		"demo": "https://stealth-reader.vercel.app",
 		"highlights": [
 			"EPUB parsing and transformation",
 			"VS Code-like interface",
-			"Makes reading look like coding"
+			"Custom text transformation pipeline",
+			"Unconventional reading experience"
 		],
 		"status": "completed",
-		"category": "cv"
+		"category": "additional"
 	},
 	{
 		"name": "Convert CLI",
 		"description": "Universal local file conversion CLI across 7 categories (images, video, audio, docs, archives, ebooks, fonts) with batch processing and interactive wizard.",
+		"description_ptbr": "CLI de conversão universal de arquivos em 7 categorias (imagens, vídeo, áudio, docs, arquivos, ebooks, fontes) com processamento em lote e wizard interativo.",
 		"tech": [
 			"Node.js",
 			"Commander.js",
@@ -70,59 +139,8 @@
 			"7 conversion categories",
 			"Batch processing",
 			"Interactive wizard mode",
-			"Granular quality control per format type"
-		],
-		"status": "completed",
-		"category": "cv"
-	},
-	{
-		"name": "Bookclubinho",
-		"description": "Full-stack book club platform with real-time iMessage-style chat (SSE + Redis Streams), OAuth2 + magic link auth, gamification system, and CI/CD pipeline.",
-		"tech": [
-			"Next.js",
-			"FastAPI",
-			"PostgreSQL",
-			"Upstash Redis",
-			"Cloudflare R2",
-			"Python"
-		],
-		"repo": "https://github.com/fe-m-bueno/bookclubinho",
-		"demo": null,
-		"highlights": [
-			"Real-time iMessage-style chat (SSE + Redis Streams)",
-			"OAuth2 + magic link authentication",
-			"JWT blacklist + session tracking",
-			"Gamification (badges, streaks, Wrapped)",
-			"Book voting via Hardcover GraphQL API",
-			"RLS on every table",
-			"CI/CD deploying to Vercel + Railway"
-		],
-		"status": "in-progress",
-		"category": "cv"
-	},
-	{
-		"name": "Resutorant",
-		"description": "Dining experience tracker with detailed reviews, list organization, advanced filtering, and analytics with interactive charts.",
-		"tech": [
-			"Next.js",
-			"TypeScript",
-			"TailwindCSS",
-			"Supabase",
-			"TanStack Query",
-			"Recharts",
-			"React Hook Form",
-			"Zod",
-			"Radix UI",
-			"Framer Motion"
-		],
-		"repo": "https://github.com/fe-m-bueno/resutorant",
-		"demo": "https://resutorantt.vercel.app",
-		"highlights": [
-			"Detailed restaurant reviews with notes, prices, dates, custom tags",
-			"List organization (visited/saved)",
-			"Advanced search and filtering",
-			"Dining analytics with interactive charts",
-			"Supabase authentication"
+			"Granular quality control per format type",
+			"Format-specific pipelines"
 		],
 		"status": "completed",
 		"category": "additional"
@@ -267,30 +285,10 @@
 		"category": "additional"
 	},
 	{
-		"name": "Ematchi",
-		"description": "SvelteKit application.",
-		"tech": ["Svelte", "SvelteKit", "TypeScript"],
-		"repo": "https://github.com/fe-m-bueno/ematchi",
-		"demo": null,
-		"highlights": [],
-		"status": "experimental",
-		"category": "additional"
-	},
-	{
 		"name": "AI Fullstack Mood",
 		"description": "AI-powered mood tracking full-stack application.",
 		"tech": ["Next.js", "TypeScript", "TailwindCSS", "Prisma", "Vitest"],
 		"repo": "https://github.com/fe-m-bueno/ai-fullstack-mood",
-		"demo": null,
-		"highlights": [],
-		"status": "experimental",
-		"category": "additional"
-	},
-	{
-		"name": "Svelteflix",
-		"description": "SvelteKit application.",
-		"tech": ["Svelte", "SvelteKit", "TypeScript"],
-		"repo": "https://github.com/fe-m-bueno/svelteflix",
 		"demo": null,
 		"highlights": [],
 		"status": "experimental",

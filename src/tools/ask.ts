@@ -1,4 +1,6 @@
+import { readFileSync } from "node:fs";
 import { loadCv } from "../lib/parser.js";
+import { dataPath } from "../lib/paths.js";
 import { loadProjects } from "../lib/projects.js";
 import {
 	type ToolResponse,
@@ -7,6 +9,24 @@ import {
 	safeLoadCv,
 	textResult,
 } from "../lib/response.js";
+
+function loadExtraFile(filename: string): Array<{ section: string; text: string }> {
+	try {
+		const raw = readFileSync(dataPath(filename), "utf-8");
+		const results: Array<{ section: string; text: string }> = [];
+		let currentSection = filename.replace(".md", "");
+		for (const line of raw.split("\n")) {
+			if (line.startsWith("## ")) {
+				currentSection = line.replace(/^## /, "").trim();
+			} else if (line.trim().length > 20) {
+				results.push({ section: currentSection, text: line.trim() });
+			}
+		}
+		return results;
+	} catch {
+		return [];
+	}
+}
 
 const STOP_WORDS = new Set([
 	"a",
@@ -185,6 +205,21 @@ export async function askAboutMeHandler(args: {
 				results.push({
 					section,
 					text: paragraph.replace(/^[#\-*\s]+/, "").trim(),
+					score: matchCount,
+				});
+			}
+		}
+	}
+
+	// Search interview stories and positioning files
+	for (const filename of ["interview-stories.md", "positioning.md"]) {
+		for (const { section, text } of loadExtraFile(filename)) {
+			const textLower = text.toLowerCase();
+			const matchCount = keywords.filter((kw) => textLower.includes(kw)).length;
+			if (matchCount > 0) {
+				results.push({
+					section,
+					text: text.replace(/^[#\-*\s]+/, "").trim(),
 					score: matchCount,
 				});
 			}
