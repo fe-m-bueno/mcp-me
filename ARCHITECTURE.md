@@ -1,12 +1,12 @@
-# Arquitetura do mcp-me
+# mcp-me Architecture
 
-Documentação técnica detalhada sobre a arquitetura, design de módulos, fluxos de dados e decisões de design.
+Detailed technical documentation on the architecture, module design, data flows, and design decisions.
 
-## Visão Geral da Arquitetura
+## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Cliente MCP (LLM/Agent)                     │
+│                     MCP Client (LLM/Agent)                      │
 │                    (Claude, Cline, etc.)                        │
 └──────────────────────┬──────────────────────────────────────────┘
                        │
@@ -42,7 +42,7 @@ Documentação técnica detalhada sobre a arquitetura, design de módulos, fluxo
     └────────┘    └────────┘    └─────────┘
 ```
 
-## Módulos e Responsabilidades
+## Modules and Responsibilities
 
 ### 1. **src/index.ts** — Entry Point
 
@@ -57,21 +57,21 @@ async function main() {
 }
 ```
 
-**Responsabilidades:**
-- Inicializa o servidor MCP
-- Configura transporte stdio (stdin/stdout)
-- Conecta o servidor ao cliente via JSON-RPC
+**Responsibilities:**
+- Initializes the MCP server
+- Sets up the stdio transport (stdin/stdout)
+- Connects the server to the client via JSON-RPC
 
-**Fluxo:**
-1. Node.js inicia o processo
-2. StdioServerTransport se prende aos canais de stdio do processo pai
-3. Qualquer erro fatal é capturado e reportado ao stderr
+**Flow:**
+1. Node.js starts the process
+2. StdioServerTransport attaches to the parent process's stdio channels
+3. Any fatal error is caught and reported on stderr
 
 ---
 
 ### 2. **src/server.ts** — MCP Server & Tool Registry
 
-Define as 4 tools MCP com descrições, schemas de input e handlers.
+Defines the 4 MCP tools with their descriptions, input schemas, and handlers.
 
 ```typescript
 export function createServer(): McpServer {
@@ -89,19 +89,19 @@ export function createServer(): McpServer {
 }
 ```
 
-**Responsabilidades:**
-- Definir schema de input de cada tool com Zod
-- Definir título e descrição para descoberta do cliente
-- Registrar handlers (callbacks) de cada tool
-- Marcar tools como read-only com hints
+**Responsibilities:**
+- Define each tool's input schema with Zod
+- Define the title and description for client discovery
+- Register each tool's handler (callback)
+- Mark the tools as read-only with hints
 
-**Hints de Segurança (READ_ONLY):**
+**Safety hints (READ_ONLY):**
 ```typescript
 const READ_ONLY = {
-  readOnlyHint: true,        // Não modifica estado
-  destructiveHint: false,    // Não deleta dados
-  idempotentHint: true,      // Sempre retorna o mesmo resultado
-  openWorldHint: false,      // Não requer acesso aberto
+  readOnlyHint: true,        // Does not modify state
+  destructiveHint: false,    // Does not delete data
+  idempotentHint: true,      // Always returns the same result
+  openWorldHint: false,      // Does not require open access
 };
 ```
 
@@ -118,19 +118,19 @@ export async function getCvHandler(args: {
 }): Promise<ToolResponse>
 ```
 
-**Fluxo:**
-1. Valida linguagem (padrão: "en")
-2. Carrega CV via `loadCv(lang)`
-3. Se `section` definida:
-   - Busca seção via `getSection(cv, section)`
-   - Retorna seção ou lista de seções disponíveis se não encontrar
-4. Caso contrário, retorna CV completo
+**Flow:**
+1. Validates the language (default: "en")
+2. Loads the CV via `loadCv(lang)`
+3. If `section` is set:
+   - Looks the section up via `getSection(cv, section)`
+   - Returns the section, or a list of available sections if not found
+4. Otherwise, returns the full CV
 
-**Matching de seção:**
-1. Match exato
-2. Match case-insensitive
-3. Match parcial (substring)
-4. Match via alias (ex: "skills" → "Technical Skills")
+**Section matching:**
+1. Exact match
+2. Case-insensitive match
+3. Partial match (substring)
+4. Alias match (for example, "skills" → "Technical Skills")
 
 ---
 
@@ -142,22 +142,22 @@ export async function listProjectsHandler(args: {
 }): Promise<ToolResponse>
 ```
 
-**Fluxo:**
-1. Carrega projetos via `loadProjects()`
-2. Se `tech` definida, filtra por match case-insensitive
-3. Formata cada projeto com helper `formatProject()`
-4. Retorna lista ou erro com tecnologias disponíveis
+**Flow:**
+1. Loads the projects via `loadProjects()`
+2. If `tech` is set, filters by a case-insensitive match
+3. Formats each project with the `formatProject()` helper
+4. Returns the list, or an error listing the available technologies
 
-**Formatação:**
+**Formatting:**
 ```
 ### Project Name (Status)
 **Stack:** Tech1, Tech2, Tech3
-**Description:** Descrição
+**Description:** Description
 **Highlights:**
-- Ponto 1
-- Ponto 2
-**Repo:** URL ou "Private"
-**Demo:** URL (se houver)
+- Point 1
+- Point 2
+**Repo:** URL or "Private"
+**Demo:** URL (if any)
 ```
 
 ---
@@ -170,10 +170,10 @@ export async function matchJobHandler(args: {
 }): Promise<ToolResponse>
 ```
 
-**Fluxo:**
-1. Carrega CV em inglês
-2. Chama `matchJob(description, cv)` em `lib/matcher.ts`
-3. Formata resultado estruturado com seções:
+**Flow:**
+1. Loads the English CV
+2. Calls `matchJob(description, cv)` in `lib/matcher.ts`
+3. Formats the structured result into sections:
    - Fit Score
    - Matching Skills
    - Gaps
@@ -190,34 +190,34 @@ export async function askAboutMeHandler(args: {
 }): Promise<ToolResponse>
 ```
 
-**Fluxo:**
-1. Extrai keywords da pergunta via `extractKeywords()`
-2. Filtra stop words (comum, genérico)
-3. Busca matches em seções do CV
-4. Busca matches em projetos
-5. Ordena por relevância (contagem de keyword matches)
-6. Agrupa por seção e retorna top 10
+**Flow:**
+1. Extracts keywords from the question via `extractKeywords()`
+2. Filters out stop words (common, generic)
+3. Searches for matches in the CV's sections
+4. Searches for matches in the projects
+5. Sorts by relevance (keyword match count)
+6. Groups by section and returns the top 10
 
 ---
 
 ### 4. **src/lib/parser.ts** — CV Parser
 
-Transforma Markdown em estrutura navegável.
+Turns Markdown into a navigable structure.
 
 ```typescript
 export interface CvData {
-  raw: string;                    // Markdown original
-  header: CvHeader;               // Nome, título, contato
-  sections: Map<string, string>;  // H2 sections com conteúdo
+  raw: string;                    // The original Markdown
+  header: CvHeader;               // Name, title, contact
+  sections: Map<string, string>;  // H2 sections with their content
 }
 ```
 
-**Algoritmo de parse:**
-1. Divide Markdown em linhas
-2. Busca H1 (`# Nome`)
-3. Extrai header lines antes do primeiro `---`
-4. Itera linhas após `---`, agrupando por H2 (`## Section`)
-5. Armazena seções em Map para O(1) lookup
+**Parsing algorithm:**
+1. Splits the Markdown into lines
+2. Finds the H1 (`# Name`)
+3. Extracts the header lines before the first `---`
+4. Iterates the lines after `---`, grouping by H2 (`## Section`)
+5. Stores the sections in a Map for O(1) lookup
 
 **Alias system:**
 ```typescript
@@ -228,7 +228,7 @@ const SECTION_ALIASES: Record<string, string[]> = {
 };
 ```
 
-Permite buscar "summary" e encontrar "Professional Summary" ou "Resumo Profissional".
+This lets you search for "summary" and find "Professional Summary" or "Resumo Profissional".
 
 **Cache:**
 ```typescript
@@ -237,7 +237,7 @@ const cvCache = new Map<string, CvData>();
 export function loadCv(lang: "en" | "pt-br"): CvData {
   const cached = cvCache.get(lang);
   if (cached) return cached;
-  // carrega do disco apenas na primeira vez
+  // loads from disk only the first time
   const cv = parseCv(readFileSync(...));
   cvCache.set(lang, cv);
   return cv;
@@ -248,92 +248,92 @@ export function loadCv(lang: "en" | "pt-br"): CvData {
 
 ### 5. **src/lib/matcher.ts** — Job Matching Engine
 
-Analisa fit entre vaga e perfil.
+Analyzes the fit between a role and the profile.
 
 ```typescript
 export interface MatchResult {
   score: number;                   // 0-100
-  matchedSkills: string[];         // Skills presentes em ambas
-  missingSkills: string[];         // Skills na vaga, não no CV
-  relevantExperience: string[];    // Experiência alinhada
-  suggestedPitch: string;          // Pitch calibrado ao score
+  matchedSkills: string[];         // Skills present on both sides
+  missingSkills: string[];         // Skills in the role, not in the CV
+  relevantExperience: string[];    // Aligned experience
+  suggestedPitch: string;          // A pitch calibrated to the score
 }
 
 export function matchJob(jobDescription: string, cv: CvData): MatchResult
 ```
 
-**Componentes:**
+**Components:**
 
 #### **Tech Keywords Registry**
-170+ tech keywords pré-compilados:
-- Linguagens: JavaScript, Python, Java, Go, Rust, etc.
-- Frameworks: React, Vue, Angular, Next.js, Django, FastAPI, etc.
-- Bancos: PostgreSQL, MongoDB, Redis, DynamoDB, etc.
-- DevOps: Docker, Kubernetes, Terraform, AWS, etc.
-- Outros: GraphQL, REST, CI/CD, MCP, ETL, etc.
+170+ pre-compiled tech keywords:
+- Languages: JavaScript, Python, Java, Go, Rust, and so on
+- Frameworks: React, Vue, Angular, Next.js, Django, FastAPI, and so on
+- Databases: PostgreSQL, MongoDB, Redis, DynamoDB, and so on
+- DevOps: Docker, Kubernetes, Terraform, AWS, and so on
+- Others: GraphQL, REST, CI/CD, MCP, ETL, and so on
 
-Cada keyword tem regex pré-compilada para matching rápido.
+Each keyword has a pre-compiled regex for fast matching.
 
 #### **extractCvSkills(cv)**
-Parseia seção "Technical Skills" e extrai skills formatados como:
+Parses the "Technical Skills" section and extracts skills formatted as:
 ```markdown
 **Frontend:** React, TypeScript, Tailwind CSS
 **Backend:** Node.js, FastAPI, PostgreSQL
 ```
 
-Resultado: `["React", "TypeScript", "Tailwind CSS", "Node.js", ...]`
+Result: `["React", "TypeScript", "Tailwind CSS", "Node.js", ...]`
 
 #### **normalizeSkill(skill)**
-Normaliza para matching:
+Normalizes a skill for matching:
 - Lowercase
-- Remove pontos, hífens, slashes
-- Normaliza espaços
+- Strips periods, hyphens, and slashes
+- Normalizes whitespace
 
-Exemplo: "Next.js" → "nextjs", "C#" → "c", "C++" → "c"
+Example: "Next.js" → "nextjs", "C#" → "c", "C++" → "c"
 
 #### **skillsMatch(a, b)**
-Verifica se skills são equivalentes com proteção contra falsos positivos:
-- Requer tamanho mínimo (3 caracteres)
-- Substring matching com threshold de 50%
+Checks whether two skills are equivalent, with protection against false positives:
+- Requires a minimum length (3 characters)
+- Substring matching with a 50% threshold
 
-Previne: "NET" de "ASP.NET" não matching com "Kubernetes".
+This prevents the "NET" from "ASP.NET" matching "Kubernetes".
 
 #### **extractTechFromDescription(description)**
-Busca todos os keywords de tech na job description usando regex pré-compiladas.
+Finds every tech keyword in the job description using the pre-compiled regexes.
 
 #### **extractExperienceBullets(cv)**
-Extrai bullet points da seção "Professional Experience":
+Extracts bullet points from the "Professional Experience" section:
 ```markdown
-- Desenvolveu sistema de chat com SSE e Redis
-- Mentored 3 engineers na stack de Node.js
+- Built a chat system with SSE and Redis
+- Mentored 3 engineers on the Node.js stack
 ```
 
 #### **Scoring Algorithm**
 
 ```typescript
-// Fase 1: Matching de skills
+// Phase 1: skill matching
 for (const tech of jobTechKeywords) {
-  // Busca em cvSkills com normalização
-  if (encontrado) {
+  // Look it up in cvSkills, with normalization
+  if (found) {
     matchedSkills.push(tech);
   } else {
     missingSkills.push(tech);
   }
 }
 
-// Fase 2: Extração de experiência relevante
+// Phase 2: extracting relevant experience
 const relevantExperience = extractExperienceBullets(cv)
   .map(bullet => ({
     bullet,
-    relevance: contar_palavras_do_job_na_bullet(bullet)
+    relevance: count_job_words_in_bullet(bullet)
   }))
-  .filter(b => relevance >= 2)  // Min 2 palavras match
+  .filter(b => relevance >= 2)  // At least 2 word matches
   .sort((a, b) => b.relevance - a.relevance)
   .slice(0, 5);  // Top 5
 
-// Fase 3: Cálculo de score
+// Phase 3: score calculation
 let score = (matchedSkills.length / totalTechKeywords) * 100;
-score += Math.min(relevantExperience.length * 2, 10);  // Bonus até 10 pontos
+score += Math.min(relevantExperience.length * 2, 10);  // Bonus of up to 10 points
 score = Math.min(Math.round(score), 100);
 ```
 
@@ -380,12 +380,12 @@ export interface Project {
 export function loadProjects(): Project[]
 ```
 
-**Responsabilidades:**
-- Carrega `projects.json` do disco
-- Valida que é um array
-- Cacheia em memória
+**Responsibilities:**
+- Loads `projects.json` from disk
+- Validates that it is an array
+- Caches it in memory
 
-Sem validação Zod strict, confia na estrutura do arquivo.
+There is no strict Zod validation; it trusts the file's structure.
 
 ---
 
@@ -403,15 +403,15 @@ export function safeLoadCv<T>(loader: () => T): T | ToolResponse
 export function isErrorResponse(value: unknown): value is ToolResponse
 ```
 
-**Padrão:**
-- Sucesso: `{ content: [{ type: "text", text: "..." }] }`
-- Erro: `{ isError: true, content: [{ type: "text", text: "..." }] }`
+**Pattern:**
+- Success: `{ content: [{ type: "text", text: "..." }] }`
+- Error: `{ isError: true, content: [{ type: "text", text: "..." }] }`
 
-**safeLoadCv** para carregamento defensivo:
+**safeLoadCv** for defensive loading:
 ```typescript
 const result = safeLoadCv(() => loadCv("en"));
 if (isErrorResponse(result)) return result;
-const cv = result;  // garantido ser CvData
+const cv = result;  // guaranteed to be CvData
 ```
 
 ---
@@ -424,16 +424,16 @@ export function dataPath(filename: string): string {
 }
 ```
 
-Resolve `src/data/` em tempo de build, `dist/data/` em runtime.
+Resolves to `src/data/` at build time and `dist/data/` at runtime.
 
-Usa `import.meta.url` para ES Modules.
+Uses `import.meta.url` for ES Modules.
 
 ---
 
 ### 9. **src/data/** — Data Files
 
 #### **cv-en.md / cv-ptbr.md**
-Markdown com estrutura:
+Markdown with this structure:
 ```markdown
 # Felipe Bueno
 **Senior Software Engineer** | São Paulo, Brazil | [email] [links]
@@ -459,10 +459,10 @@ Markdown com estrutura:
 ...
 ```
 
-Sincronizados do repo `~/Development/cv/`.
+Synced from the `~/Development/cv/` repo.
 
 #### **projects.json**
-Array JSON com estrutura extendida de projetos:
+A JSON array with the extended project structure:
 ```json
 [
   {
@@ -481,7 +481,7 @@ Array JSON com estrutura extendida de projetos:
 
 ---
 
-## Fluxos de Dados
+## Data Flows
 
 ### get_cv(lang, section) Flow
 
@@ -596,48 +596,48 @@ Response to Client
 
 ---
 
-## Decisões de Design
+## Design Decisions
 
-### 1. **Sem Over-engineering**
-- Não usar embeddings (complicado, lento)
-- Usar keyword matching simples
-- Regex pré-compiladas para performance
+### 1. **No over-engineering**
+- Don't use embeddings (complicated, slow)
+- Use simple keyword matching
+- Pre-compiled regexes for performance
 
-### 2. **Bilíngue por design**
-- Dois CVs completos (en/pt-br)
-- Stop words em ambas línguas
-- Alias em ambas línguas
+### 2. **Bilingual by design**
+- Two complete CVs (en/pt-br)
+- Stop words in both languages
+- Aliases in both languages
 
-### 3. **Outputs em texto natural**
-- Não retornar JSON cru
-- Markdown formatado legível
-- Melhor consumido por LLMs
+### 3. **Natural-text output**
+- Don't return raw JSON
+- Readable formatted Markdown
+- Better consumed by LLMs
 
-### 4. **Cache defensivo**
-- Carregar dados uma única vez
-- Mapas em memória para O(1) lookup
-- Não refrescar durante runtime
+### 4. **Defensive caching**
+- Load the data once
+- In-memory maps for O(1) lookup
+- Don't refresh during runtime
 
-### 5. **Validação Zod seletiva**
-- Input dos handlers com Zod (CLI safety)
-- Data files sem validação strict (confia no build)
-- Falha rápido com erros claros
+### 5. **Selective Zod validation**
+- Handler input validated with Zod (CLI safety)
+- Data files without strict validation (trusting the build)
+- Fail fast, with clear errors
 
-### 6. **Zero dependências extras**
-- Apenas MCP SDK obrigatório
-- Zod para validação (2 deps total)
-- Tudo mais: Node.js stdlib
+### 6. **Zero extra dependencies**
+- Only the MCP SDK is mandatory
+- Zod for validation (2 deps total)
+- Everything else: the Node.js stdlib
 
-### 7. **Honestidade no matching**
-- Reportar gaps reais
-- Score calibrado com experiência
-- Pitch ajustado ao fit real
+### 7. **Honesty in matching**
+- Report real gaps
+- A score calibrated with experience
+- A pitch adjusted to the real fit
 
 ---
 
-## Padrões de Error Handling
+## Error Handling Patterns
 
-### Try-Catch defensivo
+### Defensive try-catch
 ```typescript
 export function safeLoadCv<T>(loader: () => T): T | ToolResponse {
   try {
@@ -648,7 +648,7 @@ export function safeLoadCv<T>(loader: () => T): T | ToolResponse {
 }
 ```
 
-### Validação de input
+### Input validation
 ```typescript
 inputSchema: {
   description: z
@@ -673,11 +673,11 @@ if (filtered.length === 0) {
 
 ## Performance Characteristics
 
-| Operação | Tempo | Notas |
-|----------|-------|-------|
-| Carregar CV (primeira vez) | ~5ms | Lê arquivo, parseia, cacheia |
-| Carregar CV (cache) | <1ms | Map lookup |
-| Match job | ~20-50ms | Regex em techs + extraction |
+| Operation | Time | Notes |
+|-----------|------|-------|
+| Loading the CV (first time) | ~5ms | Reads the file, parses, caches |
+| Loading the CV (cached) | <1ms | Map lookup |
+| Match job | ~20-50ms | Regexes over techs + extraction |
 | Ask about me | ~10-30ms | Keyword matching, sorting |
 | List projects | <5ms | Array filter, format |
 
@@ -685,7 +685,7 @@ if (filtered.length === 0) {
 
 ## Testing & Debugging
 
-### Estrutura de dados esperada
+### Expected Data Structure
 
 **cv-en.md:**
 ```
@@ -709,26 +709,26 @@ content
 ]
 ```
 
-### Modo debug
+### Debug Mode
 
 ```bash
 # Print input args
 export DEBUG=mcp-me:*
 npm run dev
 
-# Use MCP Inspector para ver requests/responses
+# Use the MCP Inspector to see requests/responses
 npm run inspect
 ```
 
 ---
 
-## Migração e Versioning
+## Migration and Versioning
 
-Versão: 1.0.0 (stable)
+Version: 1.0.0 (stable)
 
-Não há versioning de data files. CVs são sincronizados manualmente. Projetos são editados inline.
+There is no versioning of the data files. The CVs are synced manually. The projects are edited inline.
 
-Para futuras versões:
-- Incrementar `version` em `server.ts` e `package.json`
-- Changelog em CHANGELOG.md
-- Deprecated tools mantidas com aviso
+For future versions:
+- Bump `version` in `server.ts` and `package.json`
+- Keep a changelog in CHANGELOG.md
+- Keep deprecated tools in place with a warning

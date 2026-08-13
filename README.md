@@ -1,125 +1,125 @@
-# mcp-me: Servidor MCP Pessoal
+# mcp-me: Personal MCP Server
 
-Um servidor [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) que transforma dados profissionais em ferramentas consumíveis por LLMs. Em vez de um recrutador ler um PDF estático de CV, ele (ou um agente) faz perguntas e recebe dados reais e estruturados em resposta.
+An [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) server that turns professional data into tools an LLM can consume. Instead of a recruiter reading a static CV PDF, they (or an agent) ask questions and get real, structured data back.
 
-**Status:** Produção | **Versão:** 1.0.0 | **Runtime:** Node.js + TypeScript
+**Status:** Production | **Version:** 1.0.0 | **Runtime:** Node.js + TypeScript
 
-## Visão Geral
+## Overview
 
-O mcp-me expõe 4 ferramentas MCP que consultam:
+mcp-me exposes 4 MCP tools that query:
 
-- **CVs bilíngues** (EN / PT-BR) em Markdown como fonte de verdade
-- **Dados de projetos** expandidos (repositório, demo, destaques técnicos, status)
-- **Análise de fit** vaga ↔ perfil com matching de skills
-- **Busca por palavras-chave** em toda a experiência profissional
+- **Bilingual CVs** (EN / PT-BR) in Markdown as the source of truth
+- **Expanded project data** (repository, demo, technical highlights, status)
+- **Job ↔ profile fit analysis** with skill matching
+- **Keyword search** across the entire professional history
 
-Ideal para:
-- Agentes de recrutamento que analisam vagas automaticamente
-- LLMs que precisam de dados biográficos estruturados
-- Assistentes pessoais que respondem a perguntas sobre experiência
-- Automação de análises de compatibilidade vaga-candidato
+It suits:
+- Recruiting agents that analyze job postings automatically
+- LLMs that need structured biographical data
+- Personal assistants that answer questions about experience
+- Automating candidate-job compatibility analyses
 
-## Características
+## Characteristics
 
-- Suporte completo a Inglês e Português Brasileiro
-- Apenas 2 dependências (MCP SDK + Zod)
-- TypeScript strict com validação Zod
-- Carregamento eficiente na memória
-- Markdown parseado manualmente
--  `match_job` reporta gaps reais, não infla o perfil
--  Texto natural estruturado, não JSON cru
+- Full support for English and Brazilian Portuguese
+- Only 2 dependencies (MCP SDK + Zod)
+- Strict TypeScript with Zod validation
+- Efficient in-memory loading
+- Markdown parsed by hand
+- `match_job` reports real gaps instead of inflating the profile
+- Structured natural text, not raw JSON
 
-## Ferramentas MCP
+## MCP Tools
 
 ### 1. `get_cv`
 
-Retorna o CV completo ou uma seção específica.
+Returns the complete CV or a specific section.
 
-**Entrada:**
+**Input:**
 ```json
 {
-  "lang": "en" | "pt-br",  // opcional, padrão: "en"
-  "section": "summary" | "skills" | "experience" | "projects" | "education" | "certifications" | "languages"  // opcional
+  "lang": "en" | "pt-br",  // optional, default: "en"
+  "section": "summary" | "skills" | "experience" | "projects" | "education" | "certifications" | "languages"  // optional
 }
 ```
 
-**Saída:** Texto Markdown formatado com o CV ou seção solicitada.
+**Output:** Formatted Markdown text with the CV or the requested section.
 
-**Exemplos de uso:**
+**Usage examples:**
 ```
 get_cv({ lang: "pt-br" })
-→ Retorna CV completo em português
+→ Returns the full CV in Portuguese
 
 get_cv({ lang: "en", section: "skills" })
-→ Retorna apenas a seção de habilidades técnicas em inglês
+→ Returns only the technical skills section, in English
 
 get_cv({ section: "professional experience" })
-→ Match parcial: retorna a seção de experiência
+→ Partial match: returns the experience section
 ```
 
 ---
 
 ### 2. `list_projects`
 
-Lista projetos com metadados completos: descrição, stack, destaques, URL do repositório, URL da demo e status.
+Lists projects with full metadata: description, stack, highlights, repository URL, demo URL, and status.
 
-**Entrada:**
+**Input:**
 ```json
 {
-  "tech": "Next.js" | "Python" | "React" | ...  // opcional, case-insensitive, partial match
+  "tech": "Next.js" | "Python" | "React" | ...  // optional, case-insensitive, partial match
 }
 ```
 
-**Saída:** Lista formatada de projetos com campos estruturados.
+**Output:** A formatted list of projects with structured fields.
 
 **Status:** `"completed"` | `"in-progress"` | `"active"` | `"experimental"`
-**Categoria:** `"cv"` (em destaque no CV) | `"additional"` (extras no GitHub)
+**Category:** `"cv"` (featured on the CV) | `"additional"` (extras on GitHub)
 
-**Exemplos de uso:**
+**Usage examples:**
 ```
 list_projects()
-→ Lista todos os 8+ projetos
+→ Lists all 8+ projects
 
 list_projects({ tech: "next" })
-→ Filtra projetos com Next.js, retorna 2-3 resultados
+→ Filters projects using Next.js, returns 2-3 results
 
 list_projects({ tech: "python" })
-→ Filtra projetos com Python, retorna projetos de IA/dados
+→ Filters projects using Python, returns the AI/data projects
 ```
 
 ---
 
 ### 3. `match_job`
 
-Analisa o fit entre o perfil e uma descrição de vaga. Retorna:
-- **Fit Score** (0-100): percentual de skills técnicas do job description presentes no CV
-- **Matching Skills**: skills presentes em ambas as partes
-- **Gaps**: skills necessários que não estão no CV
-- **Relevant Experience**: trechos de experiência profissional alinhados com a vaga
-- **Suggested Pitch**: avaliação honesta calibrada ao score
+Analyzes the fit between the profile and a job description. It returns:
+- **Fit Score** (0-100): the percentage of the job description's technical skills present in the CV
+- **Matching Skills**: skills present on both sides
+- **Gaps**: required skills that are not in the CV
+- **Relevant Experience**: excerpts of professional experience aligned with the role
+- **Suggested Pitch**: an honest assessment calibrated to the score
 
-**Entrada:**
+**Input:**
 ```json
 {
   "description": "Fullstack Engineer needed for Next.js/React + Python FastAPI microservices..."
 }
 ```
 
-**Saída:** Análise estruturada com score, skills matching, gaps e pitch.
+**Output:** A structured analysis with the score, matching skills, gaps, and pitch.
 
 **Score interpretation:**
-- **70-100:** Fit forte — candidato tem alinhamento claro com a vaga
-- **40-69:** Fit parcial — há sobreposição, mas gaps significativos
-- **0-39:** Fit baixo — seria pivô de carreira, não próximo passo natural
+- **70-100:** Strong fit — the candidate is clearly aligned with the role
+- **40-69:** Partial fit — there is overlap, but significant gaps
+- **0-39:** Low fit — this would be a career pivot, not a natural next step
 
-**Exemplos:**
+**Examples:**
 ```
 match_job({ description: "React + TypeScript + Node.js backend engineer needed..." })
 → Score: 92, Matching Skills: React, TypeScript, Node.js, ...
-→ Gaps: (nenhum), Suggested Pitch: Strong fit...
+→ Gaps: (none), Suggested Pitch: Strong fit...
 
 match_job({ description: "Lead Golang architect, 10 years Go experience required..." })
-→ Score: 15, Matching Skills: (nenhum), Gaps: Go, Kubernetes orchestration, ...
+→ Score: 15, Matching Skills: (none), Gaps: Go, Kubernetes orchestration, ...
 → Suggested Pitch: Limited overlap, significant career pivot...
 ```
 
@@ -127,92 +127,92 @@ match_job({ description: "Lead Golang architect, 10 years Go experience required
 
 ### 4. `ask_about_me`
 
-Busca por palavras-chave em todo o perfil (CV + projetos) e retorna os 10 trechos mais relevantes agrupados por seção.
+Runs a keyword search across the whole profile (CV + projects) and returns the 10 most relevant excerpts, grouped by section.
 
-**Entrada:**
+**Input:**
 ```json
 {
   "question": "ETL experience?" | "databases usados?" | "tem experiência com IA?" | ...
 }
 ```
 
-**Saída:** Trechos de experiência agrupados por seção (Professional Experience, Projects, etc.)
+**Output:** Experience excerpts grouped by section (Professional Experience, Projects, and so on)
 
-**Suporta:**
-- Palavras-chave em inglês e português
-- Busca por tecnologia, role, conceito
-- Filtro de stop words para evitar ruído
+**Supports:**
+- Keywords in English and Portuguese
+- Searching by technology, role, or concept
+- Stop-word filtering to reduce noise
 
-**Exemplos:**
+**Examples:**
 ```
 ask_about_me({ question: "ETL experience" })
-→ Retorna experiência com pipelines de dados, Airflow, etc.
+→ Returns experience with data pipelines, Airflow, and so on
 
 ask_about_me({ question: "tem experiência com IA?" })
-→ Retorna projetos e experience com LLMs, CrewAI, etc.
+→ Returns projects and experience with LLMs, CrewAI, and so on
 
 ask_about_me({ question: "Docker Kubernetes" })
-→ Retorna seções sobre DevOps, containerização, orquestração
+→ Returns sections on DevOps, containerization, and orchestration
 ```
 
 ---
 
 ## Stack
 
-| Componente | Tecnologia |
+| Component | Technology |
 |-----------|-----------|
 | **Runtime** | Node.js 22+ (ES Modules) |
-| **Linguagem** | TypeScript 5.7 |
-| **Protocolo** | MCP SDK `@modelcontextprotocol/sdk` ^1.12.1 |
-| **Validação** | Zod `^3.25.67` |
+| **Language** | TypeScript 5.7 |
+| **Protocol** | MCP SDK `@modelcontextprotocol/sdk` ^1.12.1 |
+| **Validation** | Zod `^3.25.67` |
 | **Build** | tsup 8.0 |
 | **Linting** | Biome 1.9 |
-| **Transporte** | stdio (comunicação padrão stdin/stdout) |
+| **Transport** | stdio (standard stdin/stdout communication) |
 
-## Instalação
+## Installation
 
-### Pré-requisitos
-- **Node.js 22+** (verifiquecom `node --version`)
-- **npm 10+** (ou yarn/pnpm)
+### Prerequisites
+- **Node.js 22+** (check with `node --version`)
+- **npm 10+** (or yarn/pnpm)
 
-### Passos
+### Steps
 
 ```bash
-# 1. Clone o repositório
+# 1. Clone the repository
 git clone https://github.com/fe-m-bueno/mcp-me.git
 cd mcp-me
 
-# 2. Instale dependências
+# 2. Install the dependencies
 npm install
 
 # 3. Build
 npm run build
 
-# 4. Verifique a build
+# 4. Verify the build
 ls dist/
-# Deve haver: index.js, index.d.ts (sourcemaps), data/ (CVs + projetos)
+# You should see: index.js, index.d.ts (sourcemaps), data/ (CVs + projects)
 ```
 
-### Estrutura pós-build
+### Post-Build Structure
 
 ```
 dist/
-├── index.js           # Entry point compilado
+├── index.js           # Compiled entry point
 ├── index.js.map       # Sourcemap
-├── index.d.ts         # Tipos TypeScript
+├── index.d.ts         # TypeScript types
 └── data/
-    ├── cv-en.md       # CV em inglês
-    ├── cv-ptbr.md     # CV em português
-    └── projects.json  # Dados de projetos
+    ├── cv-en.md       # CV in English
+    ├── cv-ptbr.md     # CV in Portuguese
+    └── projects.json  # Project data
 ```
 
-## Uso
+## Usage
 
-### Como Servidor MCP (no cliente)
+### As an MCP Server (in a client)
 
-Configure no seu cliente MCP (Claude Desktop, Cline, etc.):
+Configure it in your MCP client (Claude Desktop, Cline, and so on):
 
-**macOS/Linux - `~/.config/Claude/claude_desktop_config.json`:**
+**macOS/Linux — `~/.config/Claude/claude_desktop_config.json`:**
 ```json
 {
   "mcpServers": {
@@ -224,7 +224,7 @@ Configure no seu cliente MCP (Claude Desktop, Cline, etc.):
 }
 ```
 
-**Windows - `%APPDATA%/Claude/claude_desktop_config.json`:**
+**Windows — `%APPDATA%/Claude/claude_desktop_config.json`:**
 ```json
 {
   "mcpServers": {
@@ -236,76 +236,76 @@ Configure no seu cliente MCP (Claude Desktop, Cline, etc.):
 }
 ```
 
-Após configurar, reinicie o cliente MCP. As 4 ferramentas aparecerão disponíveis.
+After configuring it, restart the MCP client. The 4 tools will show up as available.
 
-### Teste local com MCP Inspector
+### Local Testing with MCP Inspector
 
 ```bash
 npm run inspect
 ```
 
-Abre uma interface web em `http://localhost:3000` para testar as tools interativamente.
+This opens a web interface at `http://localhost:3000` for testing the tools interactively.
 
-### Teste com Node.js direto
+### Testing with Node.js Directly
 
 ```bash
-# Terminal 1: Inicia o servidor
+# Terminal 1: start the server
 node dist/index.js
 
-# Terminal 2: Conecta via stdio
+# Terminal 2: connect via stdio
 echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0.0"}}}' | node dist/index.js
 ```
 
-## Desenvolvimento
+## Development
 
-### Estrutura do código
+### Code Structure
 
 ```
 src/
 ├── index.ts              # Entry point, stdio transport
-├── server.ts             # Definição das 4 tools com descrições
+├── server.ts             # Definition of the 4 tools with descriptions
 ├── tools/
-│   ├── cv.ts             # Handler get_cv
-│   ├── projects.ts       # Handler list_projects
-│   ├── match.ts          # Handler match_job
-│   └── ask.ts            # Handler ask_about_me
+│   ├── cv.ts             # get_cv handler
+│   ├── projects.ts       # list_projects handler
+│   ├── match.ts          # match_job handler
+│   └── ask.ts            # ask_about_me handler
 ├── lib/
-│   ├── parser.ts         # Parse de Markdown em seções
-│   ├── matcher.ts        # Lógica de matching vaga ↔ perfil
-│   ├── projects.ts       # Loading de projects.json
-│   ├── response.ts       # Utilitários de resposta (ToolResponse)
-│   └── paths.ts          # Resolução de caminhos de data/
+│   ├── parser.ts         # Parses Markdown into sections
+│   ├── matcher.ts        # Job ↔ profile matching logic
+│   ├── projects.ts       # Loads projects.json
+│   ├── response.ts       # Response utilities (ToolResponse)
+│   └── paths.ts          # Resolves data/ paths
 └── data/
-    ├── cv-en.md          # CV em inglês
-    ├── cv-ptbr.md        # CV em português
-    └── projects.json     # Dados de projetos com metadados
+    ├── cv-en.md          # CV in English
+    ├── cv-ptbr.md        # CV in Portuguese
+    └── projects.json     # Project data with metadata
 ```
 
-### Workflow de desenvolvimento
+### Development Workflow
 
 ```bash
-# 1. Desenvolva com watch
+# 1. Develop with watch
 npm run dev
 
-# 2. Lint em tempo real
+# 2. Lint as you go
 npm run lint
 npm run lint:fix
 
-# 3. Build final
+# 3. Final build
 npm run build
 
-# 4. Teste com Inspector
+# 4. Test with the Inspector
 npm run inspect
 ```
 
-### Adicionar uma nova tool
+### Adding a New Tool
 
-1. Crie `src/tools/new-tool.ts` com handler assíncrono
-2. Registre em `server.ts` com `server.registerTool()`
-3. Export no `index.ts` (já feito automaticamente)
-4. Rebuild e teste via `npm run inspect`
+1. Create `src/tools/new-tool.ts` with an async handler
+2. Register it in `server.ts` with `server.registerTool()`
+3. Export it from `index.ts` (this happens automatically)
+4. Rebuild and test via `npm run inspect`
 
-**Exemplo:**
+**Example:**
 ```typescript
 // src/tools/new-tool.ts
 import { loadCv } from "../lib/parser.js";
@@ -315,14 +315,14 @@ export async function newToolHandler(args: {
   query: string;
 }): Promise<ToolResponse> {
   const cv = loadCv("en");
-  // sua lógica aqui
+  // your logic here
   return textResult("resultado");
 }
 ```
 
-### Atualizar dados
+### Updating the Data
 
-**CVs:** Copie de `~/Development/cv/` para `src/data/cv-*.md`
+**CVs:** Copy them from `~/Development/cv/` to `src/data/cv-*.md`
 
 ```bash
 cp ~/Development/cv/cv-en.md src/data/
@@ -330,86 +330,86 @@ cp ~/Development/cv/cv-ptbr.md src/data/
 npm run build
 ```
 
-**Projetos:** Edite `src/data/projects.json` diretamente
+**Projects:** Edit `src/data/projects.json` directly
 
 ```bash
 vim src/data/projects.json
 npm run build
 ```
 
-## Configuração
+## Configuration
 
-### Variáveis de Ambiente
+### Environment Variables
 
-Nenhuma necessária no momento. Todos os dados são estáticos em `src/data/`.
+None needed at the moment. All data is static, in `src/data/`.
 
-### Diretório de dados
+### Data Directory
 
-O servidor busca dados em `src/data/` em tempo de build (resolvido via `lib/paths.ts`). Durante runtime, os arquivos estão em `dist/data/`.
+The server looks for data in `src/data/` at build time (resolved via `lib/paths.ts`). At runtime, the files live in `dist/data/`.
 
 ### TypeScript/Zod
 
 **tsconfig.json:**
 - Target: ES2022
 - Module: Node16 (ESM)
-- Strict mode habilitado
-- Resolução JSON habilitada
+- Strict mode enabled
+- JSON resolution enabled
 
 **biome.json:**
-- Formatter: tabs (indentação)
+- Formatter: tabs (indentation)
 - Linter: recommended rules
 - Organize imports: enabled
 
-## Performance e Optimizações
+## Performance and Optimizations
 
-### Cache em memória
+### In-Memory Cache
 
-CVs e projetos são carregados uma única vez ao iniciar e guardados em cache:
+CVs and projects are loaded once at startup and kept in a cache:
 
 ```typescript
 const cvCache = new Map<string, CvData>();
 export function loadCv(lang: "en" | "pt-br"): CvData {
   const cached = cvCache.get(lang);
   if (cached) return cached;
-  // carrega do disco, cacheia
+  // load from disk, then cache
 }
 ```
 
-### Matching eficiente
+### Efficient Matching
 
-- Regex pré-compiladas para keywords de tech (`TECH_PATTERNS`)
-- Normalização de skills com regras simples (lowercase, remover . - /)
-- Filtragem de stop words no `ask_about_me`
+- Pre-compiled regexes for tech keywords (`TECH_PATTERNS`)
+- Skill normalization with simple rules (lowercase, strip . - /)
+- Stop-word filtering in `ask_about_me`
 
-### Tamanho mínimo
+### Minimal Size
 
-- Sem dependências extras (apenas MCP SDK + Zod)
-- Parsing manual sem bibliotecas
-- Bundle: ~200KB minificado
+- No extra dependencies (just the MCP SDK + Zod)
+- Manual parsing, no libraries
+- Bundle: ~200KB minified
 
 ## Troubleshooting
 
 ### "Data file not found"
 
-Certifique-se que você rodou `npm run build`. O build copia `src/data/` para `dist/data/`.
+Make sure you ran `npm run build`. The build copies `src/data/` to `dist/data/`.
 
 ```bash
 npm run build
 ls dist/data/
 ```
 
-### Tool retorna erro indefinido
+### A Tool Returns an Undefined Error
 
-Verifique se o path absoluto no `claude_desktop_config.json` está correto:
+Check that the absolute path in `claude_desktop_config.json` is correct:
 
 ```bash
 ls /home/felipebueno/Development/mcp-me/dist/index.js
-# Deve existir
+# It must exist
 ```
 
-### MCP Inspector não abre
+### MCP Inspector Won't Open
 
-Porta 3000 pode estar em uso. Mude a porta ou encerre o processo:
+Port 3000 may be in use. Change the port or kill the process:
 
 ```bash
 lsof -i :3000
@@ -417,27 +417,26 @@ kill -9 <PID>
 npm run inspect
 ```
 
-### Linting falhando
+### Linting Failing
 
 ```bash
 npm run lint:fix
 ```
 
-Biome corrige automaticamente problemas de formatting e imports.
+Biome fixes formatting and import problems automatically.
 
-## Contribuição
+## Contributing
 
-Este é um projeto pessoal, mas se quiser melhorias:
+This is a personal project, but if you want to suggest improvements:
 
-1. Faça um fork
-2. Crie uma branch para sua feature (`git checkout -b feature/meu-feature`)
-3. Commit as mudanças (`git commit -m "Adiciona X"`)
-4. Push para a branch (`git push origin feature/meu-feature`)
-5. Abra um Pull Request
+1. Fork it
+2. Create a branch for your feature (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -m "Add X"`)
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Open a Pull Request
 
-## Contato
+## Contact
 
 **Felipe Bueno**
 GitHub: [@fe-m-bueno](https://github.com/fe-m-bueno)
 Email: felipebueno.dev@gmail.com
-
