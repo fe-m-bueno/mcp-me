@@ -1,74 +1,74 @@
-# Guia de Introdução: mcp-me
+# Getting Started: mcp-me
 
-Um guia passo-a-passo para configurar, construir e usar o servidor MCP mcp-me pela primeira vez.
+A step-by-step guide to setting up, building, and using the mcp-me MCP server for the first time.
 
-## Tabela de Conteúdos
+## Table of Contents
 
-1. [Pré-requisitos](#pré-requisitos)
-2. [Instalação](#instalação)
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
 3. [Build](#build)
-4. [Configuração](#configuração)
-5. [Primeiro uso](#primeiro-uso)
-6. [Próximos passos](#próximos-passos)
+4. [Configuration](#configuration)
+5. [First Use](#first-use)
+6. [Next Steps](#next-steps)
 
 ---
 
-## Pré-requisitos
+## Prerequisites
 
-Antes de começar, certifique-se que tem instalado:
+Before you start, make sure you have the following installed:
 
 ### Node.js 22+
 
 ```bash
-# Verifique versão instalada
+# Check the installed version
 node --version
-# Esperado: v22.x.x ou superior
+# Expected: v22.x.x or later
 
-# Se não tiver Node 22:
-# Opção 1: usando nvm (recomendado)
+# If you don't have Node 22:
+# Option 1: using nvm (recommended)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 nvm install 22
 nvm use 22
 
-# Opção 2: Homebrew (macOS)
+# Option 2: Homebrew (macOS)
 brew install node@22
 brew link node@22
 
-# Opção 3: Instalador oficial
+# Option 3: the official installer
 # https://nodejs.org/en/download/
 ```
 
 ### npm 10+
 
 ```bash
-# npm é instalado com Node.js
-# Verifique versão
+# npm ships with Node.js
+# Check the version
 npm --version
-# Esperado: 10.x.x ou superior
+# Expected: 10.x.x or later
 
-# Se precisar atualizar
+# If you need to update it
 npm install -g npm@latest
 ```
 
-### Git (opcional, para clonar repositório)
+### Git (optional, for cloning the repository)
 
 ```bash
 git --version
-# Se não tiver, instale conforme seu OS
+# If you don't have it, install it for your OS
 ```
 
-### Um cliente MCP (para usar o servidor)
+### An MCP Client (to use the server)
 
-Escolha um:
-- **Claude Desktop** (recomendado): https://claude.ai/download
+Pick one:
+- **Claude Desktop** (recommended): https://claude.ai/download
 - **Cline (VS Code)**: https://github.com/cline/cline
-- **Outra ferramenta com suporte MCP**
+- **Any other tool with MCP support**
 
 ---
 
-## Instalação
+## Installation
 
-### Passo 1: Clone ou copie o repositório
+### Step 1: Clone or Copy the Repository
 
 **Via Git:**
 ```bash
@@ -76,21 +76,21 @@ git clone https://github.com/fe-m-bueno/mcp-me.git
 cd mcp-me
 ```
 
-**Ou manualmente:**
-Baixe o zip do repositório, extraia e entre no diretório.
+**Or manually:**
+Download the repository zip, extract it, and enter the directory.
 
-### Passo 2: Instale dependências
+### Step 2: Install the Dependencies
 
 ```bash
 npm install
 ```
 
-Espere alguns segundos. Você deve ver:
+Wait a few seconds. You should see:
 ```
 added 247 packages in 5.23s
 ```
 
-### Passo 3: Verifique a instalação
+### Step 3: Verify the Installation
 
 ```bash
 npm --version
@@ -100,80 +100,80 @@ node --version
 # v22.x.x
 
 ls node_modules/@modelcontextprotocol
-# Deve listar: sdk
+# Should list: sdk
 
 ls node_modules/zod
-# Deve existir
+# Should exist
 ```
 
-Se tudo está OK, prossiga para **Build**.
+If everything looks right, move on to **Build**.
 
 ---
 
 ## Build
 
-### Passo 1: Construa o projeto
+### Step 1: Build the Project
 
 ```bash
 npm run build
 ```
 
-Você deve ver:
+You should see:
 ```
 dist/index.js    30.1 kB
 dist/index.d.ts  15.3 kB
 ```
 
-**O que acontece:**
-1. TypeScript é compilado para JavaScript (tsup)
-2. Sourcemaps são gerados para debugging
-3. Data files (CVs, projetos) são copiados para `dist/data/`
+**What happens:**
+1. TypeScript is compiled to JavaScript (tsup)
+2. Sourcemaps are generated for debugging
+3. Data files (CVs, projects) are copied to `dist/data/`
 
-### Passo 2: Verifique o resultado
+### Step 2: Check the Result
 
 ```bash
 ls -la dist/
 ```
 
-Você deve ver:
+You should see:
 ```
--rw-r--r-- index.js          (compilado)
+-rw-r--r-- index.js          (compiled)
 -rw-r--r-- index.js.map      (sourcemap)
 -rw-r--r-- index.d.ts        (types)
-drwxr-xr-x data/             (CVs + projetos)
+drwxr-xr-x data/             (CVs + projects)
 ```
 
 ```bash
 ls -la dist/data/
 ```
 
-Você deve ver:
+You should see:
 ```
--rw-r--r-- cv-en.md       (CV em inglês)
--rw-r--r-- cv-ptbr.md     (CV em português)
--rw-r--r-- projects.json  (dados de projetos)
+-rw-r--r-- cv-en.md       (CV in English)
+-rw-r--r-- cv-ptbr.md     (CV in Portuguese)
+-rw-r--r-- projects.json  (project data)
 ```
 
-### Passo 3: Teste a build
+### Step 3: Test the Build
 
 ```bash
 node dist/index.js &
-# Processa inicia em background
+# The process starts in the background
 
 sleep 1
 echo "Build OK"
 kill %1
 ```
 
-Se nenhum erro aparecer, a build funcionou!
+If no errors appear, the build worked.
 
 ---
 
-## Configuração
+## Configuration
 
-### Passo 1: Localize seu arquivo de configuração
+### Step 1: Find Your Configuration File
 
-O caminho depende do seu cliente MCP.
+The path depends on your MCP client.
 
 **Claude Desktop:**
 ```bash
@@ -188,33 +188,33 @@ cat ~/.config/Claude/claude_desktop_config.json
 ```
 
 **Cline (VS Code):**
-Você configura direto nas settings do VS Code: `Cline > MCP Servers`
+You configure it directly in the VS Code settings: `Cline > MCP Servers`
 
-### Passo 2: Obtenha o caminho absoluto
+### Step 2: Get the Absolute Path
 
-Você precisa do caminho completo até `dist/index.js`.
+You need the full path to `dist/index.js`.
 
 ```bash
-# No diretório do mcp-me:
+# In the mcp-me directory:
 pwd
-# Saída exemplo: /home/felipebueno/Development/mcp-me
+# Example output: /home/felipebueno/Development/mcp-me
 
-# Combine com dist/index.js:
+# Combine it with dist/index.js:
 echo "$(pwd)/dist/index.js"
-# Saída: /home/felipebueno/Development/mcp-me/dist/index.js
+# Output: /home/felipebueno/Development/mcp-me/dist/index.js
 ```
 
 **Windows (PowerShell):**
 ```powershell
 (Get-Location).Path + "\dist\index.js"
-# Saída: C:\Users\felipebueno\Development\mcp-me\dist\index.js
+# Output: C:\Users\felipebueno\Development\mcp-me\dist\index.js
 ```
 
-### Passo 3: Configure o cliente
+### Step 3: Configure the Client
 
 #### Claude Desktop
 
-Edite ou crie `~/.config/Claude/claude_desktop_config.json`:
+Edit or create `~/.config/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -240,9 +240,9 @@ Edite ou crie `~/.config/Claude/claude_desktop_config.json`:
 ```
 
 **Cline (VS Code):**
-1. Abra Command Palette: `Cmd+Shift+P` (macOS) ou `Ctrl+Shift+P`
-2. Procure por "Cline: Open MCP Server Settings"
-3. Adicione entrada:
+1. Open the Command Palette: `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P`
+2. Search for "Cline: Open MCP Server Settings"
+3. Add an entry:
 ```json
 {
   "me": {
@@ -252,43 +252,43 @@ Edite ou crie `~/.config/Claude/claude_desktop_config.json`:
 }
 ```
 
-### Passo 4: Reinicie seu cliente
+### Step 4: Restart Your Client
 
-- **Claude Desktop:** Quit (Cmd+Q) e reabra
-- **Cline:** Reload Window (Cmd+R ou F5)
-- **Outro cliente:** Restart conforme necessário
+- **Claude Desktop:** Quit (Cmd+Q) and reopen
+- **Cline:** Reload Window (Cmd+R or F5)
+- **Any other client:** Restart as needed
 
 ---
 
-## Primeiro Uso
+## First Use
 
-### Teste 1: Verifique se as tools estão disponíveis
+### Test 1: Check That the Tools Are Available
 
 **Claude Desktop:**
-1. Abra uma nova conversa
-2. Clique no ícone de ferramentas (wrench) na barra inferior
-3. Você deve ver 4 tools listadas:
+1. Open a new conversation
+2. Click the tools icon (wrench) in the bottom bar
+3. You should see 4 tools listed:
    - `get_cv`
    - `list_projects`
    - `match_job`
    - `ask_about_me`
 
-**Se não aparecerem:**
-- Verifique o path em `claude_desktop_config.json`
-- Certifique-se que `npm run build` foi executado
-- Restart Claude Desktop completamente
+**If they don't show up:**
+- Check the path in `claude_desktop_config.json`
+- Make sure `npm run build` ran
+- Restart Claude Desktop completely
 
-### Teste 2: Chame `get_cv`
+### Test 2: Call `get_cv`
 
-Na conversa do Claude, peça:
+In the Claude conversation, ask:
 
 ```
-Me mostre o CV em português da seção de Habilidades Técnicas
+Show me the Technical Skills section of his CV in Portuguese
 ```
 
-Claude deve usar a tool `get_cv` e retornar a seção de skills em português.
+Claude should use the `get_cv` tool and return the skills section in Portuguese.
 
-**Esperado:**
+**Expected:**
 ```
 ## Technical Skills / Competências Técnicas (Portuguese)
 
@@ -297,17 +297,17 @@ Claude deve usar a tool `get_cv` e retornar a seção de skills em português.
 ...
 ```
 
-### Teste 3: Chame `list_projects`
+### Test 3: Call `list_projects`
 
-Peça:
+Ask:
 
 ```
-Que projetos com React ele tem?
+What React projects does he have?
 ```
 
-Claude deve usar `list_projects` e retornar projetos filtrados por React.
+Claude should use `list_projects` and return the projects filtered by React.
 
-**Esperado:**
+**Expected:**
 ```
 ## Felipe Bueno's Projects (filtered by: React)
 
@@ -315,28 +315,28 @@ Found X project(s):
 
 ### Project Name (Status)
 **Stack:** React, Next.js, TypeScript, ...
-**Description:** Descrição do projeto
+**Description:** The project's description
 **Highlights:**
-- Ponto técnico 1
-- Ponto técnico 2
+- Technical point 1
+- Technical point 2
 **Repo:** https://github.com/...
 **Demo:** https://demo.vercel.app
 ```
 
-### Teste 4: Chame `match_job`
+### Test 4: Call `match_job`
 
-Peça:
+Ask:
 
 ```
-Analise se o perfil dele bate com essa vaga:
+Analyze whether his profile matches this role:
 
 Senior React engineer with 5+ years building user-facing applications.
 Must know Next.js, TypeScript, PostgreSQL. Bonus: GraphQL, Docker.
 ```
 
-Claude deve usar `match_job` e retornar análise detalhada.
+Claude should use `match_job` and return a detailed analysis.
 
-**Esperado:**
+**Expected:**
 ```
 ## Job Fit Analysis for Felipe Bueno
 
@@ -349,24 +349,24 @@ React, TypeScript, Next.js, Docker, GraphQL
 PostgreSQL
 
 ### Relevant Experience
-- Desenvolveu aplicação X com React e Next.js...
-- Mentored equipe em TypeScript...
+- Built application X with React and Next.js...
+- Mentored the team on TypeScript...
 
 ### Suggested Pitch
 Felipe is a strong fit for this role, bringing hands-on experience with...
 ```
 
-### Teste 5: Chame `ask_about_me`
+### Test 5: Call `ask_about_me`
 
-Peça:
+Ask:
 
 ```
-Ele tem experiência com arquitetura de microserviços?
+Does he have experience with microservices architecture?
 ```
 
-Claude deve usar `ask_about_me` para buscar informações.
+Claude should use `ask_about_me` to look the information up.
 
-**Esperado:**
+**Expected:**
 ```
 Based on the question "microservices architecture", here are relevant details about Felipe:
 
@@ -375,120 +375,120 @@ Based on the question "microservices architecture", here are relevant details ab
 - Implemented event-driven microservices with...
 
 **From Projects:**
-- **Project Name** (Tech1, Tech2) — Ponto técnico; Outro ponto
+- **Project Name** (Tech1, Tech2) — Technical point; Another point
 ```
 
 ---
 
-## Próximos Passos
+## Next Steps
 
-### 1. Explore as tools mais profundamente
+### 1. Explore the Tools More Deeply
 
-Agora que está funcionando, teste casos de uso reais:
+Now that it works, try real use cases:
 
 ```
 "Does he have machine learning experience?"
 "Qual stack ele usa para backend?"
-"Que banco de dados ele conhece melhor?"
-"Match com essa vaga de Data Engineer..."
+"Which databases does he know best?"
+"Match against this Data Engineer role..."
 ```
 
-### 2. Integre em seu workflow
+### 2. Integrate It Into Your Workflow
 
-Se você é um recrutador ou agente:
+If you are a recruiter or an agent:
 
-- Use `ask_about_me` para perguntas específicas
-- Use `match_job` para analisar vagas automaticamente
-- Combine `get_cv` e `list_projects` para visão holística
+- Use `ask_about_me` for specific questions
+- Use `match_job` to analyze roles automatically
+- Combine `get_cv` and `list_projects` for a holistic view
 
-### 3. Customize para seu caso
+### 3. Customize It for Your Case
 
-Se quiser adaptar para seu próprio perfil:
+If you want to adapt it to your own profile:
 
-1. **Atualize o CV:**
-   - Edite ou copie seu próprio CV para `src/data/cv-en.md`
-   - Mantenha o formato Markdown com ## sections
+1. **Update the CV:**
+   - Edit or copy your own CV into `src/data/cv-en.md`
+   - Keep the Markdown format with ## sections
 
-2. **Atualize os projetos:**
-   - Edite `src/data/projects.json` com seus projetos
+2. **Update the projects:**
+   - Edit `src/data/projects.json` with your projects
 
 3. **Rebuild:**
    ```bash
    npm run build
    ```
 
-4. **Reinicie o servidor:**
-   - Restart Claude Desktop ou seu cliente
+4. **Restart the server:**
+   - Restart Claude Desktop or your client
 
-### 4. Desenvolvimento local
+### 4. Local Development
 
-Se quiser fazer mudanças no código:
+If you want to change the code:
 
 ```bash
-# Inicie dev mode com watch
+# Start dev mode with watch
 npm run dev
 
-# Em outro terminal, teste
+# In another terminal, test it
 npm run inspect
-# Abre GUI em http://localhost:3000
+# Opens a GUI at http://localhost:3000
 ```
 
-Edite código em `src/`, a build recompila automaticamente.
+Edit the code in `src/`, and the build recompiles automatically.
 
-### 5. Próximos recursos
+### 5. Future Features
 
-Ideias para expansão futura:
+Ideas for future expansion:
 
-- **Tool nova:** `get_timeline` — experiência em ordem cronológica
-- **Tool nova:** `recommend_roles` — vagas recomendadas baseado em perfil
-- **Integração:** LinkedIn API para stats
-- **Dashboard:** Analytics de perguntas mais comuns
+- **New tool:** `get_timeline` — experience in chronological order
+- **New tool:** `recommend_roles` — roles recommended based on the profile
+- **Integration:** the LinkedIn API for stats
+- **Dashboard:** analytics on the most common questions
 
 ---
 
-## Troubleshooting Rápido
+## Quick Troubleshooting
 
-### "Tools não aparecem"
+### "The tools don't show up"
 
 ```bash
-# 1. Verifique path
+# 1. Check the path
 cat ~/.config/Claude/claude_desktop_config.json | grep args
 
-# 2. Verifique arquivo existe
+# 2. Check that the file exists
 ls /home/felipebueno/Development/mcp-me/dist/index.js
 
 # 3. Rebuild
 npm run build
 
-# 4. Restart Claude Desktop (Cmd+Q + reabra)
+# 4. Restart Claude Desktop (Cmd+Q, then reopen)
 ```
 
 ### "Data file not found"
 
 ```bash
-# Rode build completo
+# Run a full build
 npm run build
 
-# Verifique data files foram copiados
+# Check that the data files were copied
 ls dist/data/
-# Deve ter 3 arquivos
+# There should be 3 files
 
-# Se não:
+# If not:
 cp src/data/* dist/data/
 ```
 
-### "Tool retorna erro"
+### "A tool returns an error"
 
-Verifique se está usando argumentos corretos:
+Check that you are using the right arguments:
 
 ```
 get_cv: { lang?: "en" | "pt-br", section?: string }
 list_projects: { tech?: string }
-match_job: { description: string }  (obrigatório)
+match_job: { description: string }  (required)
 ask_about_me: { question: string }
 ```
 
-### "Linting ou build falhando"
+### "Linting or the build is failing"
 
 ```bash
 # Auto-fix
@@ -500,57 +500,57 @@ npm run build
 
 ---
 
-## Documentação Relacionada
+## Related Documentation
 
-Agora que está tudo funcionando:
+Now that everything works:
 
-- **README.md** — Visão geral do projeto e referência de tools
-- **ARCHITECTURE.md** — Arquitetura técnica e fluxos de dados
-- **RUNBOOK.md** — Troubleshooting, debugging e manutenção
+- **README.md** — Project overview and tool reference
+- **ARCHITECTURE.md** — Technical architecture and data flows
+- **RUNBOOK.md** — Troubleshooting, debugging, and maintenance
 
 ---
 
-## Suporte
+## Support
 
-Se encontrar problemas:
+If you run into problems:
 
-1. **Verifique RUNBOOK.md** seção Troubleshooting
-2. **Verifique logs:**
+1. **Check the Troubleshooting section of RUNBOOK.md**
+2. **Check the logs:**
    ```bash
-   # Teste manualmente o servidor
+   # Test the server manually
    node dist/index.js 2>&1 | head -20
    ```
-3. **Teste com MCP Inspector:**
+3. **Test with the MCP Inspector:**
    ```bash
    npm run inspect
-   # Abre GUI em http://localhost:3000
+   # Opens a GUI at http://localhost:3000
    ```
 
 ---
 
-## Checklist Final
+## Final Checklist
 
-Você completou com sucesso se:
+You have finished successfully if:
 
-- [ ] Node.js 22+ instalado
-- [ ] Repositório clonado ou copiado
-- [ ] `npm install` executado
-- [ ] `npm run build` completado sem erros
-- [ ] Cliente MCP configurado com path correto
-- [ ] 4 tools aparecem no cliente
-- [ ] `get_cv` retorna dados
-- [ ] `list_projects` retorna dados
-- [ ] `match_job` funciona com job description
-- [ ] `ask_about_me` funciona com perguntas
+- [ ] Node.js 22+ is installed
+- [ ] The repository is cloned or copied
+- [ ] `npm install` ran
+- [ ] `npm run build` completed without errors
+- [ ] The MCP client is configured with the right path
+- [ ] The 4 tools appear in the client
+- [ ] `get_cv` returns data
+- [ ] `list_projects` returns data
+- [ ] `match_job` works with a job description
+- [ ] `ask_about_me` works with questions
 
-Parabéns! Você está pronto para usar o mcp-me.
+Congratulations — you are ready to use mcp-me.
 
 ---
 
-## Próxima Leitura Recomendada
+## Recommended Reading Next
 
-1. **README.md** — Entenda todas as tools e seus usos
-2. **ARCHITECTURE.md** — Saiba como tudo funciona internamente
-3. **RUNBOOK.md** — Quando precisar debugar ou manter
+1. **README.md** — Understand all the tools and their uses
+2. **ARCHITECTURE.md** — Learn how everything works internally
+3. **RUNBOOK.md** — For when you need to debug or maintain it
 
 Happy prompting!

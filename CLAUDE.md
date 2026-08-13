@@ -1,75 +1,75 @@
 # mcp-me
 
-## Sobre o Projeto
+## About the Project
 
-Servidor MCP pessoal que transforma dados profissionais em tools consumíveis por LLMs. Em vez de um recrutador ler um PDF, ele (ou um agente) pergunta e o servidor responde com dados reais estruturados. Puxa dados de arquivos locais (CVs em Markdown) e de um arquivo de projetos como fonte de verdade.
+A personal MCP server that turns professional data into tools an LLM can consume. Instead of a recruiter reading a PDF, they (or an agent) ask, and the server answers with real, structured data. It pulls data from local files (Markdown CVs) and a projects file as its source of truth.
 
 ## Stack
 
 - **Runtime:** Node.js (TypeScript)
-- **Protocolo:** MCP SDK (`@modelcontextprotocol/sdk`)
+- **Protocol:** MCP SDK (`@modelcontextprotocol/sdk`)
 - **Build:** tsup
 - **Linting:** Biome
 
-## Estrutura
+## Structure
 
 ```
 mcp-me/
 ├── src/
 │   ├── index.ts              # Entry point — stdio transport
-│   ├── server.ts             # Registro de tools no servidor MCP
+│   ├── server.ts             # Tool registration on the MCP server
 │   ├── tools/
-│   │   ├── cv.ts             # get_cv — retorna CV completo ou seções específicas
-│   │   ├── projects.ts       # list_projects — projetos com stack, descrição, links
-│   │   ├── match.ts          # match_job — recebe descrição de vaga, analisa fit
-│   │   └── ask.ts            # ask_about_me — busca por keyword na experiência
+│   │   ├── cv.ts             # get_cv — returns the full CV or specific sections
+│   │   ├── projects.ts       # list_projects — projects with stack, description, links
+│   │   ├── match.ts          # match_job — takes a job description, analyzes the fit
+│   │   └── ask.ts            # ask_about_me — keyword search across the experience
 │   ├── data/
-│   │   ├── cv-en.md          # CV em inglês (synced do repo cv/)
-│   │   ├── cv-ptbr.md        # CV em português (synced do repo cv/)
-│   │   └── projects.json     # Dados expandidos dos projetos (links, demos, highlights)
+│   │   ├── cv-en.md          # CV in English (synced from the cv/ repo)
+│   │   ├── cv-ptbr.md        # CV in Portuguese (synced from the cv/ repo)
+│   │   └── projects.json     # Expanded project data (links, demos, highlights)
 │   └── lib/
-│       ├── parser.ts         # Parse dos markdowns em estrutura navegável
-│       └── matcher.ts        # Lógica de matching vaga ↔ perfil
+│       ├── parser.ts         # Parses the Markdown into a navigable structure
+│       └── matcher.ts        # Job ↔ profile matching logic
 ├── tsconfig.json
 ├── package.json
 ├── biome.json
 └── CLAUDE.md
 ```
 
-## Tools MCP
+## MCP Tools
 
 | Tool | Input | Output |
 |------|-------|--------|
-| `get_cv` | `{ lang?: "en" \| "pt-br", section?: string }` | CV completo ou seção específica (resumo, skills, experiência, etc.) |
-| `list_projects` | `{ tech?: string }` | Projetos filtráveis por tecnologia, com descrição, stack e links |
-| `match_job` | `{ description: string }` | Análise de fit: skills que batem, gaps, score, sugestão de pitch |
-| `ask_about_me` | `{ question: string }` | Busca por keyword/contexto nas experiências e retorna trechos relevantes |
+| `get_cv` | `{ lang?: "en" \| "pt-br", section?: string }` | The full CV or a specific section (summary, skills, experience, and so on) |
+| `list_projects` | `{ tech?: string }` | Projects filterable by technology, with description, stack, and links |
+| `match_job` | `{ description: string }` | Fit analysis: matching skills, gaps, score, suggested pitch |
+| `ask_about_me` | `{ question: string }` | Keyword/context search across the experience, returning relevant excerpts |
 
-## Dados
+## Data
 
-- CVs em Markdown são a fonte de verdade — ficam em `src/data/` copiados do repo `~/Development/cv/`
-- `projects.json` expande os projetos do CV com campos extras: repo URL, demo URL, highlights técnicos, status
-- O parse do Markdown divide o CV em seções navegáveis (headings H2 como chave)
+- The Markdown CVs are the source of truth — they live in `src/data/`, copied from the `~/Development/cv/` repo
+- `projects.json` expands the CV's projects with extra fields: repo URL, demo URL, technical highlights, status
+- Markdown parsing splits the CV into navigable sections (H2 headings as the key)
 
-## Convenções
+## Conventions
 
-- Output das tools em **texto natural estruturado**, não JSON cru — LLMs consomem melhor
-- `match_job` deve ser honesto: listar gaps reais, não inflar o perfil
-- Código em inglês, outputs bilíngues conforme `lang`
-- Zero dependências além de MCP SDK — parse de Markdown feito na mão (é simples)
-- Sem over-engineering: começar com keyword matching simples no `ask_about_me`, sem embeddings
+- Tool output is **structured natural text**, not raw JSON — LLMs consume it better
+- `match_job` must be honest: list real gaps, don't inflate the profile
+- Code in English, output bilingual according to `lang`
+- Zero dependencies beyond the MCP SDK — Markdown parsing is done by hand (it's simple)
+- No over-engineering: start with simple keyword matching in `ask_about_me`, no embeddings
 
-## Comandos
+## Commands
 
 ```bash
-npm install          # Instalar dependências
-npm run build        # Build com tsup
-npm run dev          # Dev mode com watch
-npm run lint         # Lint com Biome
-npm run inspect      # Testar com MCP Inspector
+npm install          # Install the dependencies
+npm run build        # Build with tsup
+npm run dev          # Dev mode with watch
+npm run lint         # Lint with Biome
+npm run inspect      # Test with the MCP Inspector
 ```
 
-## Configuração no cliente MCP
+## MCP Client Configuration
 
 ```json
 {

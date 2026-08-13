@@ -1,107 +1,107 @@
 # Runbook: mcp-me
 
-Guia operacional para troubleshooting, manutenção, debugging e operações comuns.
+An operational guide for troubleshooting, maintenance, debugging, and common operations.
 
-## Sumário
+## Contents
 
 1. [Troubleshooting](#troubleshooting)
-2. [Manutenção de dados](#manutenção-de-dados)
+2. [Data Maintenance](#data-maintenance)
 3. [Debugging](#debugging)
-4. [Logs e Monitoring](#logs-e-monitoring)
+4. [Logs and Monitoring](#logs-and-monitoring)
 5. [Performance](#performance)
-6. [Segurança](#segurança)
-7. [Desempenho em produção](#desempenho-em-produção)
+6. [Security](#security)
+7. [Running in Production](#running-in-production)
 
 ---
 
 ## Troubleshooting
 
-### Problema: "Data file not found"
+### Problem: "Data file not found"
 
-Quando qualquer tool retorna este erro.
+When any tool returns this error.
 
-**Causa raiz:**
-- Build não foi executado
-- Arquivos em `src/data/` não foram copiados para `dist/data/`
-- Caminho absolutodo `dist/` está incorreto no cliente MCP
+**Root cause:**
+- The build was not run
+- Files in `src/data/` were not copied to `dist/data/`
+- The absolute path to `dist/` is wrong in the MCP client
 
-**Solução:**
+**Fix:**
 
-1. Verifique se build foi executado:
+1. Check that the build ran:
 ```bash
 ls dist/data/
-# Deve listar: cv-en.md, cv-ptbr.md, projects.json
+# Should list: cv-en.md, cv-ptbr.md, projects.json
 ```
 
-2. Se não existir, rode o build:
+2. If they don't exist, run the build:
 ```bash
 npm run build
 ```
 
-3. Verifique permissões:
+3. Check the permissions:
 ```bash
 stat dist/data/cv-en.md
-# Deve ser readable
+# It must be readable
 chmod 644 dist/data/*
 ```
 
-4. No cliente MCP, confirme o path absoluto:
+4. In the MCP client, confirm the absolute path:
 ```bash
 # macOS/Linux
 cat ~/.config/Claude/claude_desktop_config.json | jq '.mcpServers.me.args[0]'
-# Deve ser um path absoluto que existe
+# It must be an absolute path that exists
 
-# Teste se o path existe
+# Check that the path exists
 ls /home/felipebueno/Development/mcp-me/dist/index.js
 ```
 
 ---
 
-### Problema: Tool não aparece disponível no cliente
+### Problem: A Tool Doesn't Show Up in the Client
 
-Quando `get_cv`, `list_projects`, etc. não aparecem na lista de tools.
+When `get_cv`, `list_projects`, and so on don't appear in the tool list.
 
-**Causa raiz:**
-- Servidor não inicializou corretamente
-- Transport stdio não conectou
-- Cliente não viu a resposta de capabilities
+**Root cause:**
+- The server did not initialize correctly
+- The stdio transport did not connect
+- The client did not see the capabilities response
 
-**Solução:**
+**Fix:**
 
-1. Teste manualmente:
+1. Test it manually:
 ```bash
 npm run inspect
-# Abre MCP Inspector em http://localhost:3000
-# Deve listar 4 tools sob "Models"
+# Opens the MCP Inspector at http://localhost:3000
+# It should list 4 tools under "Models"
 ```
 
-2. Se Inspector não funcionar, verifique stderr:
+2. If the Inspector doesn't work, check stderr:
 ```bash
 node dist/index.js 2>&1 | head -20
-# Se houver erro, aparecerá aqui
+# Any error will show up here
 ```
 
-3. Teste com eco:
+3. Test with an echo:
 ```bash
 # Terminal 1
 node dist/index.js
 
-# Terminal 2: simule handshake MCP
+# Terminal 2: simulate the MCP handshake
 cat <<'EOF' | node dist/index.js
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}
 EOF
 ```
 
-4. Verifique se index.js foi compilado:
+4. Check that index.js was compiled:
 ```bash
 file dist/index.js
-# Deve ser "JavaScript source"
+# Should be "JavaScript source"
 
 head -1 dist/index.js
-# Deve ter #!/usr/bin/env node (shebang)
+# Should have #!/usr/bin/env node (the shebang)
 ```
 
-5. No cliente MCP, reinicie:
+5. Restart the MCP client:
 ```bash
 # Claude Desktop: Quit + relaunch
 # Cline: Reload window
@@ -109,195 +109,195 @@ head -1 dist/index.js
 
 ---
 
-### Problema: Tool retorna resultado vazio ou inesperado
+### Problem: A Tool Returns Empty or Unexpected Results
 
-Quando uma tool retorna dados inconsistentes.
+When a tool returns inconsistent data.
 
 **get_cv:**
 ```bash
-# Teste com curl (simule chamada MCP)
+# Test with curl (simulating an MCP call)
 npm run inspect
-# No Inspector, teste com diferentes langs e sections
+# In the Inspector, try different langs and sections
 
-# Seção não encontrada?
+# Section not found?
 curl -X POST http://localhost:3000/tool \
   -H "Content-Type: application/json" \
   -d '{"tool":"get_cv","args":{"section":"invalid"}}'
-# Deve retornar lista de seções disponíveis com isError: true
+# Should return the list of available sections with isError: true
 ```
 
 **list_projects:**
 ```bash
-# Teste filtro por tech
+# Test the tech filter
 npm run inspect
-# Tente "React", "Python", "Next.js"
+# Try "React", "Python", "Next.js"
 
-# Nenhum projeto encontrado?
+# No projects found?
 cat src/data/projects.json | jq '.[].tech' | sort -u
-# Veja quais techs existem
+# See which techs exist
 ```
 
 **match_job:**
 ```bash
-# Teste com job description real
+# Test with a real job description
 npm run inspect
-# Cole uma descrição de vaga
+# Paste a job posting
 
-# Score baixo?
-# - Verifique se skills do CV estão no "Technical Skills" section
-# - Verifique se job description tem keywords de tech reconhecidas
+# Low score?
+# - Check that the CV's skills are in the "Technical Skills" section
+# - Check that the job description contains recognized tech keywords
 ```
 
 **ask_about_me:**
 ```bash
-# Teste com perguntas simples
+# Test with simple questions
 npm run inspect
 # "Python experience?"
 # "React projects?"
 
-# Sem resultados?
-# - Pode ser stop word: tente keywords mais específicos
-# - Verifique se a keyword aparece no CV/projetos
+# No results?
+# - It may be a stop word: try more specific keywords
+# - Check that the keyword appears in the CV/projects
 ```
 
 ---
 
-### Problema: Linting falha no build
+### Problem: Linting Fails During the Build
 
-Quando `npm run build` ou `npm run lint` falhando.
+When `npm run build` or `npm run lint` fails.
 
-**Causa raiz:**
-- Espaçamento inconsistente
-- Imports desorganizados
+**Root cause:**
+- Inconsistent spacing
+- Unorganized imports
 - Unused variables
 
-**Solução:**
+**Fix:**
 
 ```bash
 # Auto-fix
 npm run lint:fix
 
-# Verifique o que foi mudado
+# Check what changed
 git diff
 
-# Se ainda falhar, veja detalhes
+# If it still fails, look at the details
 npm run lint
-# Biome lista exatamente o que está errado
+# Biome lists exactly what is wrong
 ```
 
 ---
 
-### Problema: Node.js version incompatível
+### Problem: Incompatible Node.js Version
 
-Quando `node dist/index.js` falha com erro de sintaxe.
+When `node dist/index.js` fails with a syntax error.
 
-**Causa raiz:**
+**Root cause:**
 - Node.js < 22
-- Versão incompatível com ES Modules
+- A version incompatible with ES Modules
 
-**Solução:**
+**Fix:**
 
 ```bash
-# Verifique versão
+# Check the version
 node --version
-# Deve ser v22.x.x ou superior
+# Should be v22.x.x or later
 
-# Instale Node 22+
+# Install Node 22+
 # Via nvm
 nvm install 22
 nvm use 22
 
-# Ou via Homebrew (macOS)
+# Or via Homebrew (macOS)
 brew install node@22
 
-# Rebuild após upgrade
+# Rebuild after upgrading
 npm run build
 ```
 
 ---
 
-### Problema: Porta 3000 já em uso (MCP Inspector)
+### Problem: Port 3000 Already in Use (MCP Inspector)
 
-Quando `npm run inspect` falha.
+When `npm run inspect` fails.
 
-**Causa raiz:**
-- Outro processo usando porta 3000
-- Inspector anterior não encerrou
+**Root cause:**
+- Another process is using port 3000
+- A previous Inspector did not shut down
 
-**Solução:**
+**Fix:**
 
 ```bash
-# Verifique qual processo
+# Find out which process
 lsof -i :3000
-# Ou no Windows
+# Or on Windows
 netstat -ano | findstr :3000
 
-# Encerre o processo
+# Kill the process
 kill -9 <PID>
-# Ou no Windows
+# Or on Windows
 taskkill /PID <PID> /F
 
-# Tente novamente
+# Try again
 npm run inspect
 ```
 
 ---
 
-### Problema: CV ou projetos não atualizando
+### Problem: The CV or Projects Don't Update
 
-Quando você edita `src/data/` mas o servidor não vê mudanças.
+When you edit `src/data/` but the server doesn't see the changes.
 
-**Causa raiz:**
-- Cache em memória não foi limpo
-- Dados não foram sincronizados do repo cv/
-- Build não copiou dados novos
+**Root cause:**
+- The in-memory cache was not cleared
+- The data was not synced from the cv/ repo
+- The build did not copy the new data
 
-**Solução:**
+**Fix:**
 
 ```bash
-# Se estiver em desenvolvimento (npm run dev)
-# O watcher só recompila TypeScript, não copia dados
+# If you are in development (npm run dev)
+# The watcher only recompiles TypeScript; it does not copy data
 
-# Solução: Copie dados manualmente
+# Fix: copy the data manually
 cp ~/Development/cv/cv-en.md src/data/
 cp ~/Development/cv/cv-ptbr.md src/data/
 
-# Rebuild completo
+# Full rebuild
 npm run build
 
-# Cache será zerado ao reiniciar o servidor
+# The cache is cleared when the server restarts
 ```
 
-**Para projetos.json:**
+**For projects.json:**
 ```bash
-# Edite diretamente
+# Edit it directly
 vim src/data/projects.json
 
 # Rebuild
 npm run build
 
-# Se em dev mode, restart manual:
-# Ctrl+C e rode npm run dev novamente
+# If you're in dev mode, restart manually:
+# Ctrl+C and run npm run dev again
 ```
 
 ---
 
-## Manutenção de Dados
+## Data Maintenance
 
-### Sincronizar CVs do repo cv/
+### Syncing the CVs from the cv/ Repo
 
-Os CVs são a fonte de verdade. Mantenha sincronizados.
+The CVs are the source of truth. Keep them in sync.
 
 ```bash
-# Verifique estrutura do repo cv/
+# Check the cv/ repo's structure
 ls ~/Development/cv/
-# Deve ter: cv-en.md, cv-ptbr.md
+# Should contain: cv-en.md, cv-ptbr.md
 
-# Sincronize
+# Sync
 cp ~/Development/cv/cv-en.md /home/felipebueno/Development/mcp-me/src/data/
 cp ~/Development/cv/cv-ptbr.md /home/felipebueno/Development/mcp-me/src/data/
 
-# Verifique diffs
+# Check the diffs
 diff ~/Development/cv/cv-en.md /home/felipebueno/Development/mcp-me/src/data/cv-en.md
 
 # Rebuild
@@ -305,26 +305,26 @@ cd /home/felipebueno/Development/mcp-me
 npm run build
 ```
 
-### Adicionar novo projeto
+### Adding a New Project
 
-1. Edite `src/data/projects.json`:
+1. Edit `src/data/projects.json`:
 ```json
 {
-  "name": "Novo Projeto",
-  "description": "Descrição concisa",
+  "name": "New Project",
+  "description": "A concise description",
   "tech": ["Tech1", "Tech2"],
   "repo": "https://github.com/fe-m-bueno/repo-url",
   "demo": "https://demo.vercel.app",
   "highlights": [
-    "Ponto técnico 1",
-    "Ponto técnico 2"
+    "Technical point 1",
+    "Technical point 2"
   ],
   "status": "completed",
   "category": "cv"
 }
 ```
 
-2. Valide JSON:
+2. Validate the JSON:
 ```bash
 cat src/data/projects.json | jq '.' > /dev/null && echo "OK"
 ```
@@ -334,22 +334,22 @@ cat src/data/projects.json | jq '.' > /dev/null && echo "OK"
 npm run build
 ```
 
-4. Teste:
+4. Test:
 ```bash
 npm run inspect
-# Em Projects, teste `list_projects({ tech: "Tech1" })`
+# Under Projects, test `list_projects({ tech: "Tech1" })`
 ```
 
-### Atualizar seção de skills
+### Updating the Skills Section
 
-1. Edite CV:
+1. Edit the CV:
 ```bash
 vim src/data/cv-en.md
-# Procure por ## Technical Skills
-# Atualize a lista
+# Find ## Technical Skills
+# Update the list
 ```
 
-2. Formato esperado:
+2. Expected format:
 ```markdown
 ## Technical Skills
 
@@ -364,37 +364,37 @@ vim src/data/cv-en.md
 npm run build
 ```
 
-4. Teste matching:
+4. Test the matching:
 ```bash
 npm run inspect
-# Teste match_job com job description que inclui seus skills
+# Test match_job with a job description that includes your skills
 ```
 
 ---
 
 ## Debugging
 
-### Ativar logs detalhados
+### Enabling Detailed Logs
 
-Nenhum sistema de logs built-in. Use console.log manual ou Debug module.
+There is no built-in logging system. Use manual console.log or the Debug module.
 
 ```typescript
-// Em lib/matcher.ts, por exemplo
+// In lib/matcher.ts, for example
 import debug from 'debug';
 const log = debug('mcp-me:matcher');
 
-// Seu código
+// Your code
 log('Extracting tech from description:', jobDescription);
 ```
 
-Rode com:
+Run it with:
 ```bash
 DEBUG=mcp-me:* npm run dev
 ```
 
-### Inspecionar estrutura parseada
+### Inspecting the Parsed Structure
 
-Verifique se CV foi parseado corretamente:
+Check that the CV was parsed correctly:
 
 ```bash
 node -e "
@@ -406,9 +406,9 @@ console.log('Skills sample:', cv.sections.get('Technical Skills')?.slice(0, 200)
 " 2>&1
 ```
 
-### Testar matching sem MCP
+### Testing the Matching Without MCP
 
-Teste `matchJob` diretamente:
+Test `matchJob` directly:
 
 ```bash
 node -e "
@@ -422,7 +422,7 @@ console.log(JSON.stringify(result, null, 2));
 " 2>&1
 ```
 
-### Testar parser de CV
+### Testing the CV Parser
 
 ```bash
 node -e "
@@ -437,13 +437,13 @@ console.log(cv.sections.get('Experiência Profissional')?.slice(0, 300));
 
 ---
 
-## Logs e Monitoring
+## Logs and Monitoring
 
-### Onde estão os logs?
+### Where Are the Logs?
 
-Nenhum logging centralizado. Logs vão para stderr/stdout.
+There is no centralized logging. Logs go to stderr/stdout.
 
-Em Claude Desktop, veja em:
+In Claude Desktop, look in:
 ```bash
 # macOS
 ~/Library/Logs/Claude
@@ -452,43 +452,43 @@ Em Claude Desktop, veja em:
 %APPDATA%/Claude/logs
 
 # Linux (via Cline)
-# Veja na aba "Output" do Cline
+# Check Cline's "Output" tab
 ```
 
-### Capturar stderr do servidor
+### Capturing the Server's stderr
 
-Quando `node dist/index.js` está rodando como MCP server:
+When `node dist/index.js` is running as an MCP server:
 
 ```bash
-# No cliente MCP (Claude Desktop), abra o console do desenvolvedor
-# Cmd+Shift+I (Windows/Linux) ou Cmd+Opt+I (macOS)
-# Procure por "mcp-me" logs
+# In the MCP client (Claude Desktop), open the developer console
+# Cmd+Shift+I (Windows/Linux) or Cmd+Opt+I (macOS)
+# Look for "mcp-me" logs
 ```
 
-### Health check do servidor
+### Server Health Check
 
 ```bash
-# Verifique se processo está rodando
+# Check that the process is running
 ps aux | grep "mcp-me\|node dist/index.js"
 
-# Teste se porta stdio funciona
+# Check that the stdio port works
 timeout 5 node dist/index.js < /dev/null 2>&1 | head -10
-# Deve fechar sem erro (output vazio é ok)
+# It should close without an error (empty output is fine)
 ```
 
 ---
 
 ## Performance
 
-### Otimizações implementadas
+### Optimizations in Place
 
-1. **Cache de CV**: Carregado uma única vez em memória
-2. **Regex pré-compiladas**: Tech keywords não são recompiladas
-3. **Lazy evaluation**: Projetos carregados só se ask_about_me ou list_projects
+1. **CV cache**: loaded into memory once
+2. **Pre-compiled regexes**: tech keywords are not recompiled
+3. **Lazy evaluation**: projects are loaded only for ask_about_me or list_projects
 
 ### Benchmark
 
-Rode benchmarks manualmente:
+Run the benchmarks manually:
 
 ```bash
 node -e "
@@ -508,39 +508,39 @@ console.log('Match job:', (time2 - start2).toFixed(2), 'ms');
 "
 ```
 
-### Reduzir footprint
+### Reducing the Footprint
 
-Se servidor estiver lento:
+If the server feels slow:
 
-1. **Limpe o cache Node**:
+1. **Clear the Node cache**:
 ```bash
 rm -rf node_modules/.cache
 ```
 
-2. **Use `--expose-gc` para debugar memory**:
+2. **Use `--expose-gc` to debug memory**:
 ```bash
 node --expose-gc dist/index.js
 ```
 
-3. **Profile com Chrome DevTools**:
+3. **Profile with Chrome DevTools**:
 ```bash
 node --inspect dist/index.js &
-# Acesse chrome://inspect
+# Open chrome://inspect
 ```
 
 ---
 
-## Segurança
+## Security
 
 ### Permissions
 
-Certifique-se que apenas o usuário correto pode ler dados:
+Make sure only the right user can read the data:
 
 ```bash
-# CV files devem ser readable por você
+# The CV files should be readable by you
 chmod 600 src/data/cv-*.md
 
-# Projects file (pode ser mais permissivo)
+# The projects file (can be more permissive)
 chmod 640 src/data/projects.json
 
 # Dist files
@@ -548,65 +548,65 @@ chmod 755 dist/index.js
 chmod 644 dist/data/*
 ```
 
-### Dados sensíveis
+### Sensitive Data
 
-O CV contém informações pessoais. Nunca:
-- Commitar para repo público sem review
-- Compartilhar path do MCP server sem permissão
-- Logar completo CV para debug
+The CV contains personal information. Never:
+- Commit it to a public repo without review
+- Share the MCP server's path without permission
+- Log the complete CV for debugging
 
 ### Environment
 
-Nenhuma env var necessária. Todos os dados são estáticos.
+No environment variables are needed. All the data is static.
 
 ---
 
-## Desempenho em Produção
+## Running in Production
 
-### Checklist pré-deploy
+### Pre-Deploy Checklist
 
 ```bash
 # 1. Lint
 npm run lint
-# Deve passar sem erros
+# Should pass with no errors
 
 # 2. Build
 npm run build
-# Deve completar sem warnings
+# Should complete with no warnings
 
-# 3. Verifique data files
+# 3. Check the data files
 ls -la dist/data/
-# Deve ter 3 arquivos
+# There should be 3 files
 
-# 4. Teste tools
+# 4. Test the tools
 npm run inspect
-# Teste cada tool manualmente
+# Test each tool manually
 
-# 5. Verifique build size
+# 5. Check the build size
 du -sh dist/
-# Deve ser < 500KB (sem node_modules)
+# Should be < 500KB (excluding node_modules)
 ```
 
-### Monitoring em produção
+### Monitoring in Production
 
-Se rodar como serviço (systemd, pm2, etc.):
+If you run it as a service (systemd, pm2, and so on):
 
 ```bash
 # pm2 example
 pm2 start "node dist/index.js" --name "mcp-me" --log-date-format "YYYY-MM-DD HH:mm:ss"
 
-# Ver logs
+# View logs
 pm2 logs mcp-me
 
-# Estatísticas
+# Statistics
 pm2 monit
 ```
 
-### Troubleshooting em produção
+### Troubleshooting in Production
 
-Se MCP server crasha:
+If the MCP server crashes:
 
-1. **Verifique logs**:
+1. **Check the logs**:
 ```bash
 pm2 logs mcp-me --lines 50
 ```
@@ -616,99 +616,99 @@ pm2 logs mcp-me --lines 50
 pm2 restart mcp-me
 ```
 
-3. **Se crash persiste**:
+3. **If the crash persists**:
 ```bash
-# Reconstrua
+# Rebuild
 npm run build
 
-# Restart com reload
+# Restart with a reload
 pm2 restart mcp-me --force
 ```
 
-### Update em produção
+### Updating in Production
 
-Quando sincronizar CVs ou projetos:
+When syncing the CVs or projects:
 
 ```bash
-# 1. Copie dados
+# 1. Copy the data
 cp ~/Development/cv/cv-*.md src/data/
 
 # 2. Rebuild
 npm run build
 
-# 3. Restart (sem downtime se usar pm2)
+# 3. Restart (no downtime if you use pm2)
 pm2 restart mcp-me
 ```
 
 ---
 
-## Runbooks Rápidos
+## Quick Runbooks
 
-### "Quero testar uma tool"
+### "I want to test a tool"
 ```bash
 npm run inspect
-# UI web se abre, teste interativamente
+# A web UI opens; test interactively
 ```
 
-### "Atualizei o CV"
+### "I updated the CV"
 ```bash
 cp ~/Development/cv/cv-en.md src/data/
 npm run build
-# Server recarrega automaticamente
+# The server reloads automatically
 ```
 
-### "Adicionei um projeto"
+### "I added a project"
 ```bash
 vim src/data/projects.json
-# Edite e salve
+# Edit and save
 
 npm run build
 npm run inspect
-# Teste list_projects
+# Test list_projects
 ```
 
-### "Recebi erro 'Data file not found'"
+### "I got a 'Data file not found' error"
 ```bash
 npm run build
 ls dist/data/
-# Deve ter 3 arquivos
+# There should be 3 files
 
-# Se não:
+# If not:
 cp src/data/* dist/data/
 chmod 644 dist/data/*
 ```
 
-### "Tool não aparece no cliente"
+### "A tool doesn't show up in the client"
 ```bash
 npm run inspect
-# Veja se aparece em http://localhost:3000
+# See whether it appears at http://localhost:3000
 
-# Se não:
+# If not:
 npm run lint:fix
 npm run build
-# Restart cliente MCP (Claude Desktop)
+# Restart the MCP client (Claude Desktop)
 ```
 
-### "Quer deletar cache do CV"
+### "I want to clear the CV cache"
 ```bash
-# Cache só existe em runtime
-# Restart é suficiente:
-# Reinicie o servidor
-# Ou em dev: Ctrl+C e npm run dev
+# The cache only exists at runtime
+# A restart is enough:
+# Restart the server
+# Or in dev: Ctrl+C and npm run dev
 ```
 
 ---
 
-## Referência Rápida de Comandos
+## Quick Command Reference
 
-| Tarefa | Comando |
-|--------|---------|
+| Task | Command |
+|------|---------|
 | Build | `npm run build` |
-| Dev com watch | `npm run dev` |
+| Dev with watch | `npm run dev` |
 | Lint | `npm run lint` |
 | Auto-fix lint | `npm run lint:fix` |
-| Test com GUI | `npm run inspect` |
-| Sincronizar CVs | `cp ~/Development/cv/cv-*.md src/data/` |
-| Validar JSON projetos | `jq '.' src/data/projects.json > /dev/null` |
-| Verifique data files | `ls -la dist/data/` |
-| Parse CV manualmente | `node -e "import { loadCv } from ..."` |
+| Test with a GUI | `npm run inspect` |
+| Sync the CVs | `cp ~/Development/cv/cv-*.md src/data/` |
+| Validate the projects JSON | `jq '.' src/data/projects.json > /dev/null` |
+| Check the data files | `ls -la dist/data/` |
+| Parse the CV manually | `node -e "import { loadCv } from ..."` |
